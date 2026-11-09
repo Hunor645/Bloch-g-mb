@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{--bg:#0c111b;--panel:#141d2b;--panel2:#192536;--line:#29374b;--text:#eaf0f8;--muted:#91a0b5;--accent:#6ee7c2;--accent2:#7aa7ff;--danger:#ff7b86;--radius:16px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#17263a 0,transparent 38%),var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif;min-height:100vh}
+.topbar{max-width:1440px;margin:auto;padding:30px 32px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #263246}
+h1{font-size:clamp(25px,3vw,36px);margin:4px 0 0;letter-spacing:-1.3px}h2{font-size:18px;margin:3px 0 0;letter-spacing:-.3px}.eyebrow{font:500 10px 'DM Mono',monospace;letter-spacing:1.8px;color:var(--accent);margin:0}.topbar-badge,.counter{border:1px solid var(--line);padding:8px 12px;border-radius:30px;color:var(--muted);font-size:11px}
+.app-grid{max-width:1440px;margin:24px auto;padding:0 32px 30px;display:grid;grid-template-columns:minmax(0,1.65fr) minmax(330px,1fr);gap:18px;align-items:start}
+.panel{background:linear-gradient(145deg,rgba(25,37,54,.96),rgba(18,27,41,.98));border:1px solid var(--line);border-radius:var(--radius);padding:19px;box-shadow:0 14px 40px #0002}
+.visualization-panel{grid-row:span 2}.panel-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.hint,.small-note{font-size:11px;color:var(--muted)}.plot{width:100%;height:490px}.plot-fallback{height:490px;display:grid;align-content:center;text-align:center;color:var(--muted);padding:25px}.hidden{display:none!important}
+.side-column{display:grid;gap:18px}.state-list{display:grid;gap:8px}.state-row{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:center;background:#0e1724;border:1px solid #27354a;border-radius:10px;padding:10px 11px}.state-dot{width:9px;height:9px;border-radius:50%}.state-name{font-size:12px;font-weight:700}.state-meta{font:10px 'DM Mono',monospace;color:var(--muted)}.state-actions{display:flex;gap:5px}.icon-button{border:1px solid var(--line);background:#1a293b;color:var(--muted);border-radius:7px;padding:4px 7px;cursor:pointer}.icon-button:hover{color:var(--text);border-color:var(--accent)}
+.add-state-row{display:flex;gap:8px;margin-top:11px}input,select{font:inherit;color:var(--text);background:#0d1724;border:1px solid var(--line);border-radius:9px;padding:10px;width:100%;outline:none}input:focus,select:focus{border-color:var(--accent2)}.add-state-row input{min-width:0}
+.field-label{display:block;font-size:11px;color:var(--muted);margin:12px 0 7px}.parameter-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:14px}.parameter-grid label{font:12px 'DM Mono',monospace;color:var(--muted)}.parameter-grid label span{float:right;color:var(--text)}input[type=range]{padding:0;margin-top:12px;accent-color:var(--accent);background:transparent}
+.gate-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.gate-button{background:#0e1927;color:var(--text);border:1px solid #30415a;border-radius:9px;padding:11px 5px;font:500 13px 'DM Mono',monospace;cursor:pointer;transition:.15s}.gate-button:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}#gateAngle{margin-bottom:5px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;padding:0 10px 5px}.legend-item{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:11px}.legend-dot{width:8px;height:8px;border-radius:50%}
+.circuit-panel,.details-panel,.theory-panel{grid-column:1/-1}.circuit-list{min-height:56px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 0 14px}.circuit-chip{display:flex;align-items:center;gap:8px;background:#0e1927;border:1px solid #30415a;border-radius:9px;padding:8px 9px;font:12px 'DM Mono',monospace}.circuit-chip.active{border-color:var(--accent);box-shadow:0 0 0 1px #6ee7c233}.chip-index{color:var(--muted);font-size:10px}.chip-remove{border:0;background:transparent;color:var(--danger);cursor:pointer;font-size:15px}.empty-state{color:var(--muted);font-size:12px}.control-row{border-top:1px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;align-items:center;gap:12px}.playback-controls{display:flex;gap:7px;flex-wrap:wrap}.button{border-radius:9px;padding:9px 12px;font:600 11px Manrope,sans-serif;cursor:pointer;border:1px solid transparent}.button-primary{background:var(--accent);color:#092019}.button-primary:hover{filter:brightness(1.08)}.button-secondary{background:#223149;color:var(--text);border-color:#34455d}.button-secondary:hover{border-color:var(--accent2)}.text-button{background:none;border:0;color:var(--muted);cursor:pointer;font-size:11px}.text-button:hover{color:var(--danger)}.step-indicator{font-size:11px;color:var(--muted);white-space:nowrap}.step-indicator strong{color:var(--accent);font:500 14px 'DM Mono',monospace}
+.details-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.detail-card{border:1px solid var(--line);border-radius:11px;padding:13px;background:#0e1724}.detail-title{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;margin-bottom:10px}.detail-table{display:grid;grid-template-columns:1fr auto;gap:7px;font-size:11px;color:var(--muted)}.detail-table strong{font:11px 'DM Mono',monospace;color:var(--text);text-align:right}
+.theory-content{max-width:1000px;color:#b6c2d2;font-size:12px;line-height:1.75}.formula{font:13px 'DM Mono',monospace;color:var(--accent);background:#0d1724;border:1px solid #25354a;border-radius:9px;padding:11px 14px;margin:10px 0}.explanation{border-left:2px solid var(--accent2);padding:8px 12px;margin-top:12px;color:#d4deea;background:#111e2d;border-radius:0 8px 8px 0}
+footer{text-align:center;color:#596a81;font-size:10px;padding:4px 20px 24px}
+@media(max-width:900px){.app-grid{grid-template-columns:1fr;padding:0 16px}.visualization-panel{grid-row:auto}.side-column{grid-template-columns:1fr 1fr}.topbar{padding:22px 16px}.plot{height:410px}}
+@media(max-width:600px){.side-column{grid-template-columns:1fr}.topbar{align-items:flex-start;gap:10px;flex-direction:column}.plot{height:350px}.control-row{align-items:flex-start;flex-direction:column}.parameter-grid{gap:8px}}
+
+/* Külön Bloch-gömb minden kvantumállapothoz. */
+
+.bloch-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.bloch-grid[data-count="1"] {
+  grid-template-columns: 1fr;
+}
+
+.bloch-card {
+  min-width: 0;
+  overflow: hidden;
+  background: #0e1724;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px;
+}
+
+.bloch-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 26px;
+  padding: 2px 8px 0;
+}
+
+.bloch-card-name {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.bloch-plot-canvas {
+  width: 100%;
+  height: 330px;
+}
+
+.bloch-grid[data-count="1"] .bloch-plot-canvas {
+  height: 490px;
+}
+
+@media (max-width: 900px) {
+  .bloch-plot-canvas {
+    height: 300px;
+  }
+
+  .bloch-grid[data-count="1"] .bloch-plot-canvas {
+    height: 410px;
+  }
+}
+
+@media (max-width: 600px) {
+  .bloch-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bloch-plot-canvas,
+  .bloch-grid[data-count="1"] .bloch-plot-canvas {
+    height: 350px;
+  }
+}
+
+
+/* Kiválasztott állapot a listában. */
+.state-row.selected {
+  border-color: var(--accent);
+  background: #142a2a;
+  box-shadow: 0 0 0 1px #6ee7c233;
+}
+
+/* Kapu célállapotainak kiválasztása. */
+.gate-target-section {
+  margin-bottom: 15px;
+}
+
+.gate-targets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gate-target-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  background: #0e1724;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  color: var(--text);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.gate-target-option:has(input:checked) {
+  border-color: var(--accent);
+  background: #142a2a;
+}
+
+.gate-target-option input {
+  width: auto;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.chip-targets {
+  color: var(--muted);
+  font: 10px 'DM Mono', monospace;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

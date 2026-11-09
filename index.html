@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bloch-gömb szimulátor</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">KVANTUMINFORMATIKAI ALKALMAZÁSOK</p>
+      <h1>Bloch-gömb szimulátor</h1>
+    </div>
+    <div class="topbar-badge">1 qubit · legfeljebb 4 állapot</div>
+  </header>
+
+  <main class="app-grid">
+    <section class="panel visualization-panel">
+      <div class="panel-heading">
+        <div><p class="eyebrow">TÉRBELI MEGJELENÍTÉS</p><h2>Bloch-gömb</h2></div>
+        <span class="hint">Forgatás: egér · Nagyítás: görgő</span>
+      </div>
+      <div id="blochPlots" class="bloch-grid" aria-label="Az állapotok különálló Bloch-gömbjei"></div>
+      <div id="plotFallback" class="plot-fallback hidden">
+        <strong>Hiányzik a Plotly könyvtár.</strong>
+        <p>Töltsd le a <code>plotly.min.js</code> fájlt, és másold a projekt <code>lib/</code> mappájába. Részletek a README-ben.</p>
+      </div>
+      <div id="legend" class="legend"></div>
+    </section>
+
+    <aside class="side-column">
+      <section class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">ÁLLAPOTOK</p><h2>Összehasonlítás</h2></div><span id="stateCount" class="counter">1 / 4</span></div>
+        <div id="stateList" class="state-list"></div>
+        <div class="add-state-row">
+          <input id="newStateName" type="text" maxlength="20" placeholder="Új állapot neve">
+          <button id="addStateBtn" class="button button-secondary">+ Állapot</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">KEZDŐÁLLAPOT</p><h2>Paraméterezés</h2></div></div>
+        <label class="field-label" for="presetSelect">Előre definiált állapot</label>
+        <select id="presetSelect">
+          <option value="0">|0⟩</option><option value="1">|1⟩</option>
+          <option value="plus">|+⟩</option><option value="minus">|−⟩</option>
+          <option value="plusI">|+i⟩</option><option value="minusI">|−i⟩</option>
+        </select>
+        <div class="parameter-grid">
+          <label>θ <span id="thetaValue">0°</span><input id="thetaInput" type="range" min="0" max="180" value="0"></label>
+          <label>φ <span id="phiValue">0°</span><input id="phiInput" type="range" min="0" max="360" value="0"></label>
+        </div>
+        <p class="small-note">A kezdőállapot módosítása után a közös kapusorozat újraszámolódik.</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">KAPUMŰVELETEK</p><h2>Kapu hozzáadása</h2></div></div>
+        <div class="gate-target-section">
+            <label class="field-label">Kapu alkalmazása ezekre az állapotokra</label>
+            <div id="gateTargets" class="gate-targets"></div>
+            <p class="small-note">
+                Alapértelmezésben minden állapot ki van jelölve.
+                A kiválasztás csak a következőként hozzáadott kapura vonatkozik.
+            </p>
+        </div>
+        <div class="gate-grid">
+          <button class="gate-button" data-gate="X">X</button><button class="gate-button" data-gate="Y">Y</button>
+          <button class="gate-button" data-gate="Z">Z</button><button class="gate-button" data-gate="H">H</button>
+          <button class="gate-button" data-gate="S">S</button><button class="gate-button" data-gate="T">T</button>
+          <button class="gate-button" data-gate="Rx">Rx</button><button class="gate-button" data-gate="Ry">Ry</button>
+          <button class="gate-button" data-gate="Rz">Rz</button>
+        </div>
+        <label id="angleField" class="field-label hidden" for="gateAngle">Forgatási szög (fok)</label>
+        <input id="gateAngle" class="hidden" type="number" value="90" step="15">
+        <p class="small-note">A kapu minden felvett állapotra ugyanabban a sorrendben hat.</p>
+      </section>
+    </aside>
+
+    <section class="panel circuit-panel">
+      <div class="panel-heading"><div><p class="eyebrow">KÖZÖS MŰVELETSOR</p><h2>Kapusorozat</h2></div><button id="clearCircuitBtn" class="text-button">Sorozat törlése</button></div>
+      <div id="circuitList" class="circuit-list"><span class="empty-state">Még nincs hozzáadott kapu. Válassz egyet a fenti panelen.</span></div>
+      <div class="control-row">
+        <div class="playback-controls">
+          <button id="resetBtn" class="button button-secondary">⟲ Alaphelyzet</button>
+          <button id="prevBtn" class="button button-secondary">← Vissza</button>
+          <button id="nextBtn" class="button button-primary">Tovább →</button>
+          <button id="playBtn" class="button button-primary">▶ Lejátszás</button>
+        </div>
+        <div class="step-indicator">Lépés: <strong id="stepValue">0</strong> / <span id="stepMax">0</span></div>
+      </div>
+    </section>
+
+    <section class="panel details-panel">
+      <div class="panel-heading"><div><p class="eyebrow">KVANTUMÁLLAPOT</p><h2>Aktuális értékek</h2></div></div>
+      <div id="stateDetails" class="details-grid"></div>
+    </section>
+
+    <section class="panel theory-panel">
+      <div class="panel-heading"><div><p class="eyebrow">ELMÉLETI HÁTTÉR</p><h2>Mit látunk?</h2></div></div>
+      <div class="theory-content">
+        <p>Egy tiszta, egységnyi normájú qubit állapota:</p>
+        <div class="formula">|ψ⟩ = α|0⟩ + β|1⟩, &nbsp; |α|² + |β|² = 1</div>
+        <p>A Bloch-gömbön az állapotot egy egységnyi hosszúságú vektor reprezentálja:</p>
+        <div class="formula">x = 2 Re(α*β) &nbsp; y = 2 Im(α*β) &nbsp; z = |α|² − |β|²</div>
+        <p>A gömb felszíne a tiszta qubitállapotoknak felel meg. A kapuk unitér transzformációk: megőrzik az állapot normáját. A globális fázis nem változtatja meg a fizikai állapotot, a relatív fázis viszont igen.</p>
+        <div id="gateExplanation" class="explanation">Válassz egy kaput a kapupanelen, és itt megjelenik a hozzá tartozó rövid magyarázat.</div>
+      </div>
+    </section>
+  </main>
+  <footer>Bloch-gömb szimulátor · BME VIK · Kvantuminformatikai alkalmazások</footer>
+
+  <script src="lib/plotly.min.js"></script>
+  <script src="js/quantum.js"></script>
+  <script src="js/gates.js"></script>
+  <script src="js/simulator.js"></script>
+  <script src="js/bloch-sphere.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
