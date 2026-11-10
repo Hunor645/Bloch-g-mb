@@ -72,9 +72,9 @@
           <button class="gate-button" data-gate="Rx">Rx</button><button class="gate-button" data-gate="Ry">Ry</button>
           <button class="gate-button" data-gate="Rz">Rz</button>
         </div>
-        <label id="angleField" class="field-label hidden" for="gateAngle">Forgatási szög (fok)</label>
-        <input id="gateAngle" class="hidden" type="number" value="90" step="15">
-        <p class="small-note">A kapu minden felvett állapotra ugyanabban a sorrendben hat.</p>
+        <label id="angleField" class="field-label" for="gateAngle">Forgatási szög (fok) · csak Rx, Ry, Rz kapukhoz</label>
+        <input id="gateAngle" type="number" value="90" step="15" min="-360" max="360">
+        <p class="small-note">A kapu minden felvett állapotra ugyanabban a sorrendben hat. A forgatási szög csak a forgatókapukra (Rx, Ry, Rz) vonatkozik.</p>
       </section>
     </aside>
 

@@ -1,3 +1,13 @@
 /* A komponensek közös, újrahasznosítható stílusai. */
 button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 button:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+/* A forgatási szög mező kiemelése, amikor forgatókapura (Rx/Ry/Rz) mutat a felhasználó. */
+#angleField.angle-active {
+  color: var(--accent);
+}
+
+#angleField.angle-active + #gateAngle {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px #6ee7c233;
+}
