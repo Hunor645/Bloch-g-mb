@@ -19,7 +19,7 @@
     renderCircuit();
     renderDetails();
     renderPlayback();
-    global.BlochSphere.render(simulator.states);
+    global.BlochSphere.render(simulator.states, selectedId);
   }
 
   // Állapotok listája
@@ -190,6 +190,7 @@
     // Új állapot hozzáadása
     $("addStateBtn").addEventListener("click", () => {
       try {
+        stopPlayback();
         const s = simulator.addState($("newStateName").value);
 
         $("newStateName").value = "";
@@ -215,13 +216,13 @@
 
       if (edit) {
         setSelected(Number(edit.dataset.edit));
-        renderStates();
+        renderAll();
       }
 
       if (remove) {
         try {
           const id = Number(remove.dataset.remove);
-
+          stopPlayback();
           simulator.removeState(id);
           selectedTargetIds.delete(id);
 
@@ -289,8 +290,13 @@
         const rot = rotationGates.includes(name);
         const angle = Number($("gateAngle").value);
 
-        if (rot && !Number.isFinite(angle)) {
-          alert("Adj meg érvényes szöget.");
+        if (rot && (
+          $("gateAngle").value.trim() === "" ||
+          !Number.isFinite(angle) ||
+          angle < -360 ||
+          angle > 360
+        )) {
+          alert("Adj meg -360° és 360° közötti érvényes szöget.");
           return;
         }
 
@@ -302,6 +308,7 @@
         }
 
         try {
+          stopPlayback();
           simulator.addGate(name, rot ? angle : 90, targets);
 
           $("gateExplanation").textContent =
@@ -373,6 +380,9 @@
         }
 
         simulator.next();
+        if (simulator.step >= simulator.circuit.length) {
+          stopPlayback();
+        }
         renderAll();
       }, 850);
 
@@ -389,6 +399,10 @@
     $("phiValue").textContent = p + "°";
 
     simulator.setInitial(selectedId, t, p);
+    const match = Object.entries(global.StatePresets).find(
+      ([, preset]) => preset.theta === t && preset.phi === p
+    );
+    $("presetSelect").value = match ? match[0] : "custom";
     renderAll();
   }
 

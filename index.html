@@ -22,7 +22,7 @@
         <div><p class="eyebrow">TÉRBELI MEGJELENÍTÉS</p><h2>Bloch-gömb</h2></div>
         <span class="hint">Forgatás: egér · Nagyítás: görgő</span>
       </div>
-      <div id="blochPlots" class="bloch-grid" aria-label="Az állapotok különálló Bloch-gömbjei"></div>
+      <div id="blochPlots" class="bloch-grid" aria-label="A kiválasztott kvantumállapot Bloch-gömbje"></div>
       <div id="plotFallback" class="plot-fallback hidden">
         <strong>Hiányzik a Plotly könyvtár.</strong>
         <p>Töltsd le a <code>plotly.min.js</code> fájlt, és másold a projekt <code>lib/</code> mappájába. Részletek a README-ben.</p>
@@ -31,7 +31,8 @@
     </section>
 
     <aside class="side-column">
-      <section class="panel">
+      <div class="control-top-grid">
+      <section class="panel state-panel">
         <div class="panel-heading"><div><p class="eyebrow">ÁLLAPOTOK</p><h2>Összehasonlítás</h2></div><span id="stateCount" class="counter">1 / 4</span></div>
         <div id="stateList" class="state-list"></div>
         <div class="add-state-row">
@@ -40,22 +41,24 @@
         </div>
       </section>
 
-      <section class="panel">
+      <section class="panel parameter-panel">
         <div class="panel-heading"><div><p class="eyebrow">KEZDŐÁLLAPOT</p><h2>Paraméterezés</h2></div></div>
         <label class="field-label" for="presetSelect">Előre definiált állapot</label>
         <select id="presetSelect">
           <option value="0">|0⟩</option><option value="1">|1⟩</option>
           <option value="plus">|+⟩</option><option value="minus">|−⟩</option>
           <option value="plusI">|+i⟩</option><option value="minusI">|−i⟩</option>
+        <option value="custom">Egyéni</option>
         </select>
         <div class="parameter-grid">
           <label>θ <span id="thetaValue">0°</span><input id="thetaInput" type="range" min="0" max="180" value="0"></label>
           <label>φ <span id="phiValue">0°</span><input id="phiInput" type="range" min="0" max="360" value="0"></label>
         </div>
-        <p class="small-note">A kezdőállapot módosítása után a közös kapusorozat újraszámolódik.</p>
+        <p class="small-note">A kezdőállapot módosítása után a kapusorozat újraszámolódik.</p>
       </section>
+      </div>
 
-      <section class="panel">
+      <section class="panel gate-panel">
         <div class="panel-heading"><div><p class="eyebrow">KAPUMŰVELETEK</p><h2>Kapu hozzáadása</h2></div></div>
         <div class="gate-target-section">
             <label class="field-label">Kapu alkalmazása ezekre az állapotokra</label>
@@ -65,20 +68,31 @@
                 A kiválasztás csak a következőként hozzáadott kapura vonatkozik.
             </p>
         </div>
-        <div class="gate-grid">
-          <button class="gate-button" data-gate="X">X</button><button class="gate-button" data-gate="Y">Y</button>
-          <button class="gate-button" data-gate="Z">Z</button><button class="gate-button" data-gate="H">H</button>
-          <button class="gate-button" data-gate="S">S</button><button class="gate-button" data-gate="T">T</button>
-          <button class="gate-button" data-gate="Rx">Rx</button><button class="gate-button" data-gate="Ry">Ry</button>
-          <button class="gate-button" data-gate="Rz">Rz</button>
+        <div class="gate-groups">
+          <div class="gate-group standard-gates">
+            <div class="gate-group-heading"><strong>Alapkapuk</strong><span>X · Y · Z · H · S · T</span></div>
+            <div class="gate-grid standard-gate-grid">
+              <button class="gate-button" data-gate="X">X</button><button class="gate-button" data-gate="Y">Y</button>
+              <button class="gate-button" data-gate="Z">Z</button><button class="gate-button" data-gate="H">H</button>
+              <button class="gate-button" data-gate="S">S</button><button class="gate-button" data-gate="T">T</button>
+            </div>
+            <p class="small-note">Rögzített kvantumkapuk, külön szögparaméter nélkül.</p>
+          </div>
+          <div class="gate-group rotation-gates">
+            <div class="gate-group-heading"><strong>Forgatókapuk</strong><span>Rx · Ry · Rz</span></div>
+            <div class="gate-grid rotation-gate-grid">
+              <button class="gate-button" data-gate="Rx">Rx</button><button class="gate-button" data-gate="Ry">Ry</button>
+              <button class="gate-button" data-gate="Rz">Rz</button>
+            </div>
+            <div class="angle-control">
+              <label id="angleField" class="field-label" for="gateAngle">Forgatási szög</label>
+              <div class="angle-input-row"><input id="gateAngle" type="number" value="90" step="15" min="-360" max="360"><span>fok</span></div>
+            </div>
+          </div>
         </div>
-        <label id="angleField" class="field-label" for="gateAngle">Forgatási szög (fok) · csak Rx, Ry, Rz kapukhoz</label>
-        <input id="gateAngle" type="number" value="90" step="15" min="-360" max="360">
-        <p class="small-note">A kapu minden felvett állapotra ugyanabban a sorrendben hat. A forgatási szög csak a forgatókapukra (Rx, Ry, Rz) vonatkozik.</p>
+        <p class="small-note gate-help">A kiválasztott kapu csak a fent kijelölt állapotokra hat. A szög kizárólag az Rx, Ry és Rz kapuknál használatos.</p>
       </section>
-    </aside>
-
-    <section class="panel circuit-panel">
+      <section class="panel circuit-panel">
       <div class="panel-heading"><div><p class="eyebrow">KÖZÖS MŰVELETSOR</p><h2>Kapusorozat</h2></div><button id="clearCircuitBtn" class="text-button">Sorozat törlése</button></div>
       <div id="circuitList" class="circuit-list"><span class="empty-state">Még nincs hozzáadott kapu. Válassz egyet a fenti panelen.</span></div>
       <div class="control-row">
@@ -92,12 +106,13 @@
       </div>
     </section>
 
-    <section class="panel details-panel">
+      <div class="info-grid">
+      <section class="panel details-panel">
       <div class="panel-heading"><div><p class="eyebrow">KVANTUMÁLLAPOT</p><h2>Aktuális értékek</h2></div></div>
       <div id="stateDetails" class="details-grid"></div>
     </section>
 
-    <section class="panel theory-panel">
+      <section class="panel theory-panel">
       <div class="panel-heading"><div><p class="eyebrow">ELMÉLETI HÁTTÉR</p><h2>Mit látunk?</h2></div></div>
       <div class="theory-content">
         <p>Egy tiszta, egységnyi normájú qubit állapota:</p>
@@ -107,7 +122,9 @@
         <p>A gömb felszíne a tiszta qubitállapotoknak felel meg. A kapuk unitér transzformációk: megőrzik az állapot normáját. A globális fázis nem változtatja meg a fizikai állapotot, a relatív fázis viszont igen.</p>
         <div id="gateExplanation" class="explanation">Válassz egy kaput a kapupanelen, és itt megjelenik a hozzá tartozó rövid magyarázat.</div>
       </div>
-    </section>
+      </section>
+      </div>
+    </aside>
   </main>
   <footer>Bloch-gömb szimulátor · BME VIK · Kvantuminformatikai alkalmazások</footer>
 

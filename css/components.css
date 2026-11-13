@@ -11,3 +11,9 @@ button:disabled{opacity:.35;cursor:not-allowed;transform:none}
   border-color: var(--accent);
   box-shadow: 0 0 0 1px #6ee7c233;
 }
+
+/* A szögmező kiemelése akkor is működik, ha az input külön sorban van. */
+#angleField.angle-active + .angle-input-row input {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px #6ee7c233;
+}

@@ -18,5 +18,74 @@ test("Rz(90°) 90°-kal forgatja az egyenlítőn",()=>{const b=Q.bloch(G.apply(p
 test("A szimulátor legfeljebb 4 állapotot enged",()=>{const sim=new SimulatorClass();sim.addState("B");sim.addState("C");sim.addState("D");let threw=false;try{sim.addState("E");}catch(e){threw=true;}assert(threw);});
 test("A közös kapusorozat minden állapotra lefut",()=>{const sim=new SimulatorClass();sim.addState("B");sim.addGate("X");sim.next();assert(Q.physicalEqual(sim.states[0].current,one));assert(Q.physicalEqual(sim.states[1].current,one));});
 test("Visszalépés visszaállítja a kezdőállapotot",()=>{const sim=new SimulatorClass();sim.addGate("X");sim.next();sim.previous();phys(sim.states[0].current,zero);});
+
+test("A kapu csak a kijelölt állapotra hat",()=>{
+  const sim=new SimulatorClass();
+  const other=sim.addState("B");
+  sim.addGate("X",90,[sim.states[0].id]);
+  sim.next();
+  phys(sim.states[0].current,one);
+  phys(other.current,zero);
+});
+test("Külön kapuk különböző célállapotokra alkalmazhatók",()=>{
+  const sim=new SimulatorClass();
+  const second=sim.addState("B");
+  sim.addGate("X",90,[sim.states[0].id]);
+  sim.addGate("H",90,[second.id]);
+  sim.setStep(2);
+  phys(sim.states[0].current,one);
+  phys(second.current,plus);
+});
+test("A getSnapshots figyelembe veszi a kapu célállapotát",()=>{
+  const sim=new SimulatorClass();
+  const second=sim.addState("B");
+  sim.addGate("X",90,[sim.states[0].id]);
+  const snapshots=sim.getSnapshots(second.id);
+  assert(snapshots.length===2);
+  phys(snapshots[1],zero);
+});
+test("Kezdőállapot-módosítás után a már végrehajtott kapuk újraszámolódnak",()=>{
+  const sim=new SimulatorClass();
+  sim.addGate("X",90,[0]);
+  sim.next();
+  sim.setInitial(0,180,0);
+  phys(sim.states[0].current,zero);
+});
+test("Törölt állapot célazonosítóját új állapot nem örökli",()=>{
+  const sim=new SimulatorClass();
+  const old=sim.addState("Régi");
+  sim.addGate("X",90,[old.id]);
+  sim.removeState(old.id);
+  const fresh=sim.addState("Új");
+  sim.setStep(1);
+  phys(fresh.current,zero);
+});
+
+test("Egy kapulépés egyszerre frissíti az összes kijelölt állapotot",()=>{
+  const sim=new SimulatorClass();
+  const second=sim.addState("B");
+  const third=sim.addState("C");
+  sim.addGate("X",90,[sim.states[0].id,second.id]);
+  sim.next();
+  phys(sim.states[0].current,one);
+  phys(second.current,one);
+  phys(third.current,zero);
+});
+test("A különböző célállapotú kapuk sorrendben, közös lépésekben futnak",()=>{
+  const sim=new SimulatorClass();
+  const second=sim.addState("B");
+  const third=sim.addState("C");
+  sim.addGate("X",90,[sim.states[0].id,second.id]);
+  sim.addGate("H",90,[second.id,third.id]);
+  sim.setStep(1);
+  phys(sim.states[0].current,one);
+  phys(second.current,one);
+  phys(third.current,zero);
+  sim.setStep(2);
+  phys(sim.states[0].current,one);
+  phys(second.current,minus);
+  phys(third.current,plus);
+});
+
 document.getElementById("summary").textContent=`Eredmény: ${passed} sikeres, ${failed} sikertelen teszt.`;
 })();

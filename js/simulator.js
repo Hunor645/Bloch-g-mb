@@ -38,6 +38,7 @@
   class Simulator {
     constructor() {
       this.states = [makeState(0, "|0⟩")];
+      this.nextStateId = 1;
       this.circuit = [];
       this.step = 0;
     }
@@ -47,7 +48,7 @@
         throw new Error("Legfeljebb 4 állapot vehető fel.");
       }
 
-      const id = Math.max(-1, ...this.states.map(s => s.id)) + 1;
+      const id = this.nextStateId++;
 
       const st = makeState(
         id,
@@ -84,7 +85,9 @@
     addGate(name, angle = 90, targetIds = null) {
       const targets = targetIds === null
         ? this.states.map(s => s.id)
-        : targetIds.filter(id => this.states.some(s => s.id === id));
+        : [...new Set(targetIds)].filter(id =>
+            this.states.some(s => s.id === id)
+          );
 
       if (targets.length === 0) {
         throw new Error("Legalább egy célállapotot ki kell választani.");
@@ -117,18 +120,26 @@
     recompute() {
       this.step = Math.min(this.step, this.circuit.length);
 
-      for (const st of this.states) {
-        let current = Q.clone(st.initial);
+      // Minden állapotot a saját kezdőállapotából indítunk.
+      // Ezután kapunként haladunk: egy kapulépésben az összes
+      // hozzárendelt állapot frissül, a többi változatlan marad.
+      const currentStates = new Map(
+        this.states.map(st => [st.id, Q.clone(st.initial)])
+      );
 
-        for (let i = 0; i < this.step; i++) {
-          const gate = this.circuit[i];
+      for (let i = 0; i < this.step; i++) {
+        const gate = this.circuit[i];
 
-          if (gate.targetIds.includes(st.id)) {
-            current = global.Gates.apply(current, gate);
-          }
+        for (const id of gate.targetIds) {
+          if (!currentStates.has(id)) continue;
+
+          const current = currentStates.get(id);
+          currentStates.set(id, global.Gates.apply(current, gate));
         }
+      }
 
-        st.current = current;
+      for (const st of this.states) {
+        st.current = currentStates.get(st.id);
       }
     }
 

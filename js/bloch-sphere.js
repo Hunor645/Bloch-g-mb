@@ -158,36 +158,48 @@
     if (!global.Plotly) {
       container.classList.add("hidden");
       fallback.classList.remove("hidden");
-      container.dataset.count = states.length;
       return;
     }
 
     container.classList.remove("hidden");
     fallback.classList.add("hidden");
+    container.dataset.count = String(states.length);
+
+    if (!states.length) return;
 
     const existingCards = new Map(
       Array.from(container.querySelectorAll(".bloch-card"))
         .map(card => [String(card.dataset.stateId), card])
     );
+    const activeIds = new Set(states.map(state => String(state.id)));
 
-    const activeIds = new Set();
-
+    // A kártyákat megtartjuk rejtve is, így állapotváltáskor
+    // az adott állapot saját Plotly-kamerája is megmarad.
     for (const state of states) {
       const id = String(state.id);
-      activeIds.add(id);
-
       let card = existingCards.get(id);
 
       if (!card) {
         card = createCard(state);
+        container.appendChild(card);
       }
 
       updateCard(card, state);
+      card.classList.remove("hidden");
+    }
 
-      // A meglévő DOM-elemet megtartjuk, így a Plotly
-      // meg tudja őrizni az adott gömb kameraállását.
-      container.appendChild(card);
+    for (const [id, card] of existingCards) {
+      if (!activeIds.has(id)) {
+        const plot = card.querySelector(".bloch-plot-canvas");
+        if (plot) global.Plotly.purge(plot);
+        card.remove();
+      }
+    }
 
+    for (const state of states) {
+      const card = container.querySelector(
+        `.bloch-card[data-state-id="${String(state.id)}"]`
+      );
       const plot = card.querySelector(".bloch-plot-canvas");
 
       const layout = {
@@ -196,85 +208,40 @@
         paper_bgcolor: "rgba(0,0,0,0)",
         plot_bgcolor: "rgba(0,0,0,0)",
         showlegend: false,
-        uirevision: "bloch-" + id,
+        uirevision: "bloch-" + state.id,
         scene: {
-          uirevision: "bloch-camera-" + id,
+          uirevision: "bloch-camera-" + state.id,
           bgcolor: "rgba(0,0,0,0)",
           aspectmode: "cube",
           camera: {
             eye: { x: 1.55, y: 1.55, z: 1.2 }
           },
-          xaxis: {
-            range: [-1.3, 1.3],
-            visible: false
-          },
-          yaxis: {
-            range: [-1.3, 1.3],
-            visible: false
-          },
-          zaxis: {
-            range: [-1.3, 1.3],
-            visible: false
-          },
+          xaxis: { range: [-1.3, 1.3], visible: false },
+          yaxis: { range: [-1.3, 1.3], visible: false },
+          zaxis: { range: [-1.3, 1.3], visible: false },
           annotations: [
-            {
-              x: 1.22, y: 0, z: 0,
-              text: "X",
-              showarrow: false,
-              font: { color: "#d28d8d" }
-            },
-            {
-              x: 0, y: 1.22, z: 0,
-              text: "Y",
-              showarrow: false,
-              font: { color: "#91b8e9" }
-            },
-            {
-              x: 0, y: 0, z: 1.22,
-              text: "|0⟩",
-              showarrow: false,
-              font: { color: "#9ad9bc" }
-            },
-            {
-              x: 0, y: 0, z: -1.22,
-              text: "|1⟩",
-              showarrow: false,
-              font: { color: "#9ad9bc" }
-            }
+            { x: 1.22, y: 0, z: 0, text: "X", showarrow: false, font: { color: "#d28d8d" } },
+            { x: 0, y: 1.22, z: 0, text: "Y", showarrow: false, font: { color: "#91b8e9" } },
+            { x: 0, y: 0, z: 1.22, text: "|0⟩", showarrow: false, font: { color: "#9ad9bc" } },
+            { x: 0, y: 0, z: -1.22, text: "|1⟩", showarrow: false, font: { color: "#9ad9bc" } }
           ]
         },
         font: { color: "#dce6f2" }
       };
 
-      global.Plotly.react(
+      Promise.resolve(global.Plotly.react(
         plot,
         buildTraces(state),
         layout,
-        {
-          displayModeBar: false,
-          responsive: true
-        }
-      );
-      requestAnimationFrame(() => {
-    if (plot.isConnected && global.Plotly) {
-      global.Plotly.Plots.resize(plot);
+        { displayModeBar: false, responsive: true }
+      )).then(() => {
+        requestAnimationFrame(() => {
+          if (plot.isConnected && global.Plotly) {
+            global.Plotly.Plots.resize(plot);
+          }
+        });
+      });
     }
-  });
-    }
-
-    // Az időközben eltávolított állapotok gömbjeit töröljük.
-    for (const [id, card] of existingCards) {
-      if (!activeIds.has(id)) {
-        const plot = card.querySelector(".bloch-plot-canvas");
-
-        if (global.Plotly && plot) {
-          global.Plotly.purge(plot);
-        }
-
-        card.remove();
-      }
-    }
-
   }
 
   global.BlochSphere = { render };
