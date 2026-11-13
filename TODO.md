@@ -185,23 +185,25 @@ Fontos: a legutóbbi `ui.js` már tartalmazza a célállapot-választás kezelé
 
 ### P3 – Dokumentáció
 
-- `README.md` frissítése.
-- Indítási és használati útmutató elkészítése.
-- Matematikai háttér dokumentálása.
-- Kapumátrixok dokumentálása.
-- Programarchitektúra leírása.
-- Tesztelési dokumentáció elkészítése.
-- Képernyőképek készítése.
+- [x] `README.md` frissítése.
+- [x] Indítási és használati útmutató elkészítése.
+- [x] Matematikai háttér dokumentálása.
+- [x] Kapumátrixok dokumentálása.
+- [x] Programarchitektúra leírása.
+- [x] Tesztelési dokumentáció elkészítése (`docs/documentation.md` 8. fejezet + `docs/test-checklist.md`).
+- [ ] Képernyőképek készítése. **(Hátravan – kézzel kell elkészíteni a böngészőből.)**
 
 ### P4 – Beadás előkészítése
 
-- Projekt tesztelése tiszta környezetben.
-- Felesleges fájlok eltávolítása.
-- Git státusz ellenőrzése.
-- Végleges commitok elkészítése.
-- Push a GitHub repositoryba.
-- Kétfős munkamegosztás dokumentálása.
-- Beadási követelmények utolsó ellenőrzése.
+- [ ] Projekt tesztelése tiszta környezetben (lásd `docs/test-checklist.md`).
+- [x] `.gitignore` létrehozva.
+- [ ] Felesleges fájlok eltávolítása (el kell dönteni: `docs/implementation_plan.md` kell-e).
+- [ ] Git státusz ellenőrzése.
+- [ ] Végleges commitok elkészítése.
+- [ ] Push a GitHub repositoryba.
+- [ ] A `fix/ui-and-gates` branch mergelése a fő ágba.
+- [ ] Kétfős munkamegosztás dokumentálása.
+- [ ] Beadási követelmények utolsó ellenőrzése.
 
 ## 5. Következő tesztelési forgatókönyv
 

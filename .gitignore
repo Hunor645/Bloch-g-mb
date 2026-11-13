@@ -1,0 +1,24 @@
+# Operációs rendszer által generált fájlok
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Szerkesztő- és IDE-beállítások
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Naplók és ideiglenes fájlok
+*.log
+*.tmp
+.cache/
+
+# Node.js (ha a jövőben eszközök kerülnének be)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Kiro munkakönyvtár
+.kiro/

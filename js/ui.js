@@ -264,11 +264,29 @@
       }
     });
 
+    // A forgatókapu gombokra mutatva kiemeljük a szög mezőt,
+    // hogy egyértelmű legyen: a szög csak ezekre vonatkozik.
+    const rotationGates = ["Rx", "Ry", "Rz"];
+
+    document.querySelectorAll("[data-gate]").forEach(btn => {
+      const isRotation = rotationGates.includes(btn.dataset.gate);
+
+      if (isRotation) {
+        const highlight = () => $("angleField").classList.add("angle-active");
+        const clear = () => $("angleField").classList.remove("angle-active");
+
+        btn.addEventListener("mouseenter", highlight);
+        btn.addEventListener("focus", highlight);
+        btn.addEventListener("mouseleave", clear);
+        btn.addEventListener("blur", clear);
+      }
+    });
+
     // Kapuk hozzáadása
     document.querySelectorAll("[data-gate]").forEach(btn => {
       btn.addEventListener("click", () => {
         const name = btn.dataset.gate;
-        const rot = ["Rx", "Ry", "Rz"].includes(name);
+        const rot = rotationGates.includes(name);
         const angle = Number($("gateAngle").value);
 
         if (rot && !Number.isFinite(angle)) {
