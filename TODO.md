@@ -28,13 +28,13 @@ Legutóbbi módosítás – többállapotos kapuvégrehajtás
 - [x] A Bloch-vizualizáció több állapotot is képes egyszerre megjeleníteni.
 - [x] Két új automatikus teszt ellenőrzi az egyidejű frissítést és a különböző célállapotú kapuk sorrendjét.
 Még elvégzendő ellenőrzések
-- [ ] A teljes alkalmazás megnyitása a célböngészőben, a docs/test-checklist.md összes pontjának végigpróbálása.
-- [ ] Legalább két, majd három-négy állapot felvétele és ellenőrzése a bal oldali vizualizációban.
-- [ ] Ugyanahhoz a kapuhoz két vagy több állapot hozzárendelése, majd ellenőrizni, hogy egyetlen lépésben mindegyik kijelölt állapot megváltozik.
-- [ ] Különböző kapukhoz eltérő célállapotok rendelése, és ellenőrizni a kapuk sorrendjét, valamint azt, hogy a nem célzott állapotok változatlanok maradnak.
-- [ ] Az előre-, visszalépés, reset és automatikus lejátszás ellenőrzése több állapot esetén is.
-- [ ] A gömbök méretének, forgatásának és zoomjának ellenőrzése 1366×768 és 1920×1080 felbontáson.
-- [ ] A jobb oldali kompakt vezérlőpanel ellenőrzése: a kapcsolódó elemek egymás mellett jelenjenek meg, de a csoportok továbbra is egyértelműen elkülönüljenek.
+- [x] A teljes alkalmazás megnyitása a célböngészőben, a docs/test-checklist.md összes pontjának végigpróbálása.
+- [x] Legalább két, majd három-négy állapot felvétele és ellenőrzése a bal oldali vizualizációban.
+- [x] Ugyanahhoz a kapuhoz két vagy több állapot hozzárendelése, majd ellenőrizni, hogy egyetlen lépésben mindegyik kijelölt állapot megváltozik.
+- [x] Különböző kapukhoz eltérő célállapotok rendelése, és ellenőrizni a kapuk sorrendjét, valamint azt, hogy a nem célzott állapotok változatlanok maradnak.
+- [x] Az előre-, visszalépés, reset és automatikus lejátszás ellenőrzése több állapot esetén is.
+- [x] A gömbök méretének, forgatásának és zoomjának ellenőrzése 1366×768 és 1920×1080 felbontáson.
+- [x] A jobb oldali kompakt vezérlőpanel ellenőrzése: a kapcsolódó elemek egymás mellett jelenjenek meg, de a csoportok továbbra is egyértelműen elkülönüljenek.
 - [ ] Kisebb képernyőn és keskeny böngészőablakban ellenőrizni a reszponzív elrendezést és a görgetést.
 - [ ] Képernyőképeket készíteni a működő alkalmazásról és a sikeres teszteredményről.
 - [ ] A beadási kiírás alapján véglegesíteni a dokumentációt és a kétfős munkamegosztás leírását.

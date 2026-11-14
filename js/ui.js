@@ -15,11 +15,30 @@
 
   function renderAll() {
     renderStates();
+    renderSphereSelector();
     renderGateTargets();
     renderCircuit();
     renderDetails();
     renderPlayback();
     global.BlochSphere.render(simulator.states, selectedId);
+  }
+
+  // Annak kiválasztása, melyik állapot Bloch-gömbje legyen látható.
+  function renderSphereSelector() {
+    $("sphereSelector").innerHTML = simulator.states.map(s => {
+      const active = s.id === selectedId;
+
+      return `
+        <button type="button"
+                class="sphere-tab ${active ? "active" : ""}"
+                data-sphere="${s.id}"
+                aria-pressed="${active}"
+                title="${escapeHtml(s.name)} gömbjének megjelenítése">
+          <i class="legend-dot" style="background:${s.color}"></i>
+          <span>${escapeHtml(s.name)}</span>
+        </button>
+      `;
+    }).join("");
   }
 
   // Állapotok listája
@@ -235,6 +254,15 @@
           alert(err.message);
         }
       }
+    });
+
+    // A megjelenített gömb kiválasztása
+    $("sphereSelector").addEventListener("click", e => {
+      const tab = e.target.closest("[data-sphere]");
+      if (!tab) return;
+
+      setSelected(Number(tab.dataset.sphere));
+      renderAll();
     });
 
     // Célállapotok kiválasztása

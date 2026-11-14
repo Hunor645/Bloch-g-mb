@@ -6,7 +6,7 @@ BME VIK · Kvantuminformatikai alkalmazások
 
 ## Mit tud?
 
-- Legfeljebb 4 különböző kvantumállapot kezelése, mindegyik külön Bloch-gömbön.
+- Legfeljebb 4 különböző kvantumállapot kezelése; a 3D nézetben a kijelölt állapot gömbje látszik, választósávval váltható.
 - Előre definiált állapotok (|0⟩, |1⟩, |+⟩, |−⟩, |+i⟩, |−i⟩) és szabad θ, φ paraméterezés.
 - Közös kapusorozat, kapunként kiválasztható célállapotokkal.
 - Egyqubites kapuk: X, Y, Z, H, S, T, valamint szöggel paraméterezhető Rx, Ry, Rz.
@@ -25,7 +25,7 @@ A `file://` protokoll is elég, mert a szkriptek lokálisak. Ha a Plotly hiányz
 ## Használat
 
 1. **Paraméterezés** – Válassz előre definiált állapotot, vagy állítsd be a θ (polárszög) és φ (azimutszög) értékeket a csúszkákkal. A ceruza gombbal a listában kiválasztott állapot kezdőértékeit szerkeszted.
-2. **Összehasonlítás** – Vegyél fel további állapotokat (legfeljebb 4-et). Mindegyik külön gömbön jelenik meg.
+2. **Összehasonlítás** – Vegyél fel további állapotokat (legfeljebb 4-et). A 3D nézet fölötti választósávon állítható be, melyik állapot gömbje legyen látható; a számértékek minden állapotra egyszerre látszanak.
 3. **Kapu hozzáadása** – Jelöld ki, mely állapotokra hasson a kapu, állítsd be a forgatási szöget (csak Rx, Ry, Rz esetén), majd kattints a kívánt kapura.
 4. **Kapusorozat** – A sorozaton a Tovább / Vissza gombokkal lépkedhetsz, a Lejátszás pedig automatikusan végiglépteti a hátralévő kapukat.
 

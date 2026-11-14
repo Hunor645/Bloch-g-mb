@@ -37,7 +37,7 @@ A Bloch-gömb szemléltető ereje abban rejlik, hogy a négy valós paraméterre
 
 ### 1.3. A szimulátor képességei
 
-- Legfeljebb négy különböző qubitállapot egyidejű kezelése, mindegyik külön Bloch-gömbön.
+- Legfeljebb négy különböző qubitállapot egyidejű kezelése; a térbeli nézetben egyszerre a kijelölt állapot Bloch-gömbje látható, és egy választósávval váltható, melyiket mutassa.
 - Tetszőleges tiszta kezdőállapot megadása a θ és φ szögek segítségével, valamint előre definiált állapotok gyors kiválasztása.
 - Egyqubites kapuk: X, Y, Z (Pauli-kapuk), H (Hadamard), S és T (fáziskapuk), valamint Rx, Ry, Rz (forgatókapuk) tetszőleges szöggel.
 - A kapuk közös kapusorozatba fűzése, kapunként kiválasztható célállapotokkal.
@@ -206,7 +206,7 @@ A projekt hat JavaScript-modulra bomlik, amelyek felelősségei élesen elkülö
 | `js/quantum.js`    | Komplex számok, állapotok, normalizálás, Bloch-koordináták, valószínűségek, fizikai egyenlőség |
 | `js/gates.js`      | A kapumátrixok, a forgatókapuk előállítása és a mátrix-vektor szorzás  |
 | `js/simulator.js`  | Az állapotok és a közös kapusorozat kezelése, léptetés, újraszámítás   |
-| `js/bloch-sphere.js` | A Plotly-alapú, állapotonként különálló 3D gömbök felépítése és frissítése |
+| `js/bloch-sphere.js` | A Plotly-alapú 3D Bloch-gömb felépítése és frissítése; egyszerre a kijelölt állapot gömbjét mutatja |
 | `js/ui.js`         | A felhasználói események kezelése, a panelek és értékek frissítése      |
 | `js/main.js`       | Az alkalmazás indítása                                                 |
 
@@ -266,7 +266,14 @@ A `Simulator` osztály a teljes alkalmazásállapot gazdája. Metódusai: `addSt
 
 ### 5.4. `bloch-sphere.js` – a 3D megjelenítés
 
-A `BlochSphere.render(states)` függvény minden állapothoz egy külön kártyát (`bloch-card`) és abban egy Plotly-ábrát épít. A gömböt egy áttetsző `surface` nyomvonal, a három segédkört és a tengelyeket `scatter3d` vonalak, az állapotot pedig egy origóból induló vektor adja. A meglévő DOM-elemeket a függvény újrahasznosítja, így a Plotly `uirevision` segítségével megőrzi az egyes gömbök kameraállását és nagyítását a frissítések között. A megszűnt állapotok ábráit a `Plotly.purge` tisztítja, a méretezést pedig a `Plotly.Plots.resize` igazítja a tárolóhoz. Ha nincs Plotly, a függvény a tartalék panelt mutatja.
+A `BlochSphere.render(states, selectedId)` függvény a kijelölt állapothoz tartozó kártyát (`bloch-card`) és abban a Plotly-ábrát jeleníti meg. A gömböt egy áttetsző `surface` nyomvonal, a három segédkört és a tengelyeket `scatter3d` vonalak, az állapotot pedig egy origóból induló vektor adja.
+
+A modul két fontos teljesítmény- és stabilitási elvet követ:
+
+- **Lusta létrehozás és életben tartás.** Egy állapot ábrája akkor épül fel (`Plotly.newPlot`), amikor először megjelenítik. Váltáskor a többi ábrát nem bontjuk le, csak elrejtjük (`display: none`), így visszatéréskor a kameraállás és a nagyítás megmarad. A megszűnt állapotok ábráit a `Plotly.purge` szabadítja fel.
+- **Frissítéskor csak a vektor változik.** A statikus díszlet (gömbfelszín, segédkörök, tengelyek) a létrehozás után érintetlen marad. A layoutot – és benne a kameraállást – a modul soha nem küldi újra; a frissítés egyetlen `Plotly.restyle` hívással, kizárólag az állapotvektor nyomvonalára történik. Ezért kapu hozzáadásakor és a sorozat lejátszásakor a gömb mozdulatlan, csak a jelzővektor mozog.
+
+A méretezést egy `ResizeObserver` igazítja a tárolóhoz, amely csak tényleges méretváltozáskor hívja a `Plotly.Plots.resize`-t. Ha nincs Plotly, a függvény a tartalék panelt mutatja.
 
 ### 5.5. `ui.js` – a felhasználói felület
 
@@ -294,7 +301,11 @@ A hozzáadott kapuk a közös kapusorozatban jelennek meg, a célállapotaik fel
 
 ### 6.4. Több állapot összehasonlítása
 
-Minden felvett állapot külön, színkódolt Bloch-gömböt kap, így a kapuk hatása egyszerre, párhuzamosan figyelhető meg a különböző kezdőállapotokon. Az alsó panelen állapotonként láthatók az aktuális amplitúdók, a mérési valószínűségek és a Bloch-koordináták, mind három tizedesjegyre formázva, a kerekítési zaj elnyomásával.
+A térbeli nézet mindig egyetlen, nagy méretű Bloch-gömböt mutat: a kijelölt állapotét. A megjelenítés fölötti választósávon (színkódolt fülekkel, állapotonként egy) váltható, melyik állapot gömbje legyen látható. A váltás egyben azt is kijelöli, melyik állapot kezdőértékét szerkesztik a θ és φ csúszkák, így a „kijelölt állapot” fogalma a felületen egységes.
+
+A gömbök a háttérben nem bomlanak le váltáskor, ezért ha egy állapotra visszatérünk, a korábban beállított kameraállás és nagyítás megmarad.
+
+A numerikus összehasonlítás ettől független: az „Aktuális értékek” panelen **minden** állapot adatai egyszerre, egymás mellett láthatók – az amplitúdók, a mérési valószínűségek és a Bloch-koordináták, mind három tizedesjegyre formázva, a kerekítési zaj elnyomásával. Így a kapuk hatása számszerűen továbbra is párhuzamosan követhető.
 
 ---
 
@@ -306,7 +317,8 @@ Minden felvett állapot külön, színkódolt Bloch-gömböt kap, így a kapuk h
 4. A kapusorozat a kijelölt célállapotokra, közös sorrendben érvényes.
 5. A „Tovább” és „Vissza” gombokkal lépésenként haladhatsz; a „Lejátszás” automatikusan végrehajtja a hátralévő lépéseket, az „Alaphelyzet” visszaáll a sorozat elejére.
 6. Az aktuális amplitúdók, valószínűségek és Bloch-koordináták az „Aktuális értékek” panelen láthatók.
-7. A Bloch-gömb egérrel forgatható, a görgővel nagyítható; a beállított nézet a léptetések során megmarad.
+7. A térbeli nézet fölötti választósávon állítható be, melyik állapot Bloch-gömbje legyen látható. Egyszerre egy gömb látszik, teljes méretben.
+8. A Bloch-gömb egérrel forgatható, a görgővel nagyítható; a beállított nézet a léptetések során és a gömbök közti váltáskor is megmarad.
 
 ### 7.1. Példa egy használati forgatókönyvre
 
@@ -381,6 +393,6 @@ A program tiszta, egyqubites állapotokat kezel. Nem tartalmaz többqubites öss
 
 ## 11. Összefoglalás
 
-A Bloch-gömb szimulátor egy böngészőben közvetlenül futtatható, telepítést nem igénylő oktatási eszköz egyetlen qubit tiszta állapotainak és egyqubites kapuműveleteinek szemléltetésére. A program legfeljebb négy állapotot kezel külön Bloch-gömbökön, tetszőleges kezdőállapotot enged megadni, és kilenc egyqubites kaput (X, Y, Z, H, S, T, Rx, Ry, Rz) kínál, amelyek helyes működését automatikus tesztek igazolják. A kapuk közös sorozatba fűzhetők, kapunként választható célállapotokkal, és lépésenként vagy automatikusan futtathatók.
+A Bloch-gömb szimulátor egy böngészőben közvetlenül futtatható, telepítést nem igénylő oktatási eszköz egyetlen qubit tiszta állapotainak és egyqubites kapuműveleteinek szemléltetésére. A program legfeljebb négy állapotot kezel, amelyek közül a térbeli nézet a kijelöltet mutatja egy nagy méretű Bloch-gömbön (a megjelenített állapot választósávval váltható), tetszőleges kezdőállapotot enged megadni, és kilenc egyqubites kaput (X, Y, Z, H, S, T, Rx, Ry, Rz) kínál, amelyek helyes működését automatikus tesztek igazolják. A kapuk közös sorozatba fűzhetők, kapunként választható célállapotokkal, és lépésenként vagy automatikusan futtathatók.
 
 A projekt tiszta, rétegzett modulszerkezete elkülöníti a matematikai magot (`quantum.js`, `gates.js`) az állapotkezeléstől (`simulator.js`) és a megjelenítéstől (`bloch-sphere.js`, `ui.js`). Ennek köszönhetően a program egyszerre megbízható, jól tesztelhető és könnyen bővíthető, a build eszközök és keretrendszerek teljes mellőzése mellett.
