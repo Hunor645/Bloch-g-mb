@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
-:root{--bg:#0c111b;--panel:#141d2b;--panel2:#192536;--line:#29374b;--text:#eaf0f8;--muted:#91a0b5;--accent:#6ee7c2;--accent2:#7aa7ff;--danger:#ff7b86;--radius:16px}
+:root{color-scheme:light;--bg:#f5f0e6;--panel:#fffdf8;--panel2:#f0e8dc;--line:#ddcfbd;--text:#40372f;--muted:#88796a;--accent:#b86f4b;--accent2:#7d8b68;--danger:#b65b52;--radius:16px}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,#17263a 0,transparent 38%),var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif;min-height:100vh}
 .topbar{max-width:1440px;margin:auto;padding:30px 32px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #263246}
 h1{font-size:clamp(25px,3vw,36px);margin:4px 0 0;letter-spacing:-1.3px}h2{font-size:18px;margin:3px 0 0;letter-spacing:-.3px}.eyebrow{font:500 10px 'DM Mono',monospace;letter-spacing:1.8px;color:var(--accent);margin:0}.topbar-badge,.counter{border:1px solid var(--line);padding:8px 12px;border-radius:30px;color:var(--muted);font-size:11px}
@@ -376,4 +376,279 @@ footer {
 @media (max-width: 600px) {
   .control-top-grid, .gate-groups { grid-template-columns: 1fr; }
   .parameter-panel .parameter-grid { grid-template-columns: 1fr 1fr; }
+}
+
+
+/* LIGHT AUTUMN THEME — meleg törtfehér, terrakotta, zsálya és okker */
+:root { color-scheme: light; }
+body {
+  background: radial-gradient(ellipse at 12% 0%, rgba(215,187,148,.30), transparent 38%),
+              radial-gradient(ellipse at 90% 12%, rgba(179,194,164,.22), transparent 34%), var(--bg);
+  color: var(--text);
+}
+.topbar { border-bottom-color: var(--line); }
+.eyebrow { color: var(--accent); }
+.topbar-badge, .counter { background: rgba(255,253,248,.72); border-color: var(--line); color: var(--muted); }
+.panel { background: linear-gradient(145deg,rgba(255,253,248,.98),rgba(250,245,236,.98)); border-color: var(--line); box-shadow: 0 10px 28px rgba(93,70,48,.08); }
+.hint,.small-note,.field-label,.state-meta,.legend-item,.step-indicator,.detail-table,.theory-content { color: var(--muted); }
+.state-row,.detail-card,.gate-group,.gate-target-option,.circuit-chip,.formula,.explanation { background:#f7f1e7; border-color:var(--line); color:var(--text); }
+.state-row { box-shadow:0 1px 2px rgba(90,67,44,.04); }
+.state-row.selected,.gate-target-option:has(input:checked) { background:#f2e5d8; border-color:var(--accent); box-shadow:0 0 0 1px rgba(184,111,75,.16); }
+.icon-button { background:#f1e8dc; border-color:var(--line); color:var(--muted); }
+.icon-button:hover { color:var(--text); border-color:var(--accent); }
+input,select { background:#fffdf8; border-color:var(--line); color:var(--text); }
+input::placeholder { color:#a99b8c; }
+input:focus,select:focus { border-color:var(--accent2); box-shadow:0 0 0 2px rgba(125,139,104,.14); }
+input[type=range] { accent-color:var(--accent); }
+.gate-button { background:#f6efe4; color:var(--text); border-color:#d9c8b3; }
+.gate-button:hover { border-color:var(--accent); color:#995637; background:#f3e6d8; }
+.circuit-chip.active { border-color:var(--accent); box-shadow:0 0 0 1px rgba(184,111,75,.17); }
+.chip-index { color:var(--muted); }
+.chip-remove,.text-button { color:var(--danger); }
+.button-primary { background:var(--accent); color:#fffaf4; }
+.button-primary:hover { filter:brightness(1.06); }
+.button-secondary { background:#e9e3d7; color:#51463b; border-color:#d7c9b7; }
+.button-secondary:hover { border-color:var(--accent2); background:#e4e8dc; }
+.step-indicator strong { color:var(--accent); }
+.detail-table strong { color:var(--text); }
+.theory-content { color:#66594d; }
+.formula { color:#8e573d; }
+.explanation { border-left-color:var(--accent2); background:#edf0e7; color:#514d42; }
+footer { color:#9a8c7c; }
+.bloch-card { background:#fbf7ef; border-color:var(--line); box-shadow:0 4px 16px rgba(93,70,48,.05); }
+.bloch-card-name { color:var(--text); }
+.gate-group,.gate-target-option { background:#f8f3ea; }
+.gate-group-heading span { color:var(--muted); }
+.gate-target-option input { accent-color:var(--accent); }
+#angleField.angle-active { color:var(--accent); }
+#angleField.angle-active + #gateAngle,#angleField.angle-active + .angle-input-row input { border-color:var(--accent); box-shadow:0 0 0 2px rgba(184,111,75,.14); }
+.empty-state { color:var(--muted); }
+.side-column { scrollbar-color:#cbb9a4 #f1eadd; }
+.side-column::-webkit-scrollbar { width:9px; }
+.side-column::-webkit-scrollbar-track { background:#f1eadd; border-radius:8px; }
+.side-column::-webkit-scrollbar-thumb { background:#cbb9a4; border:2px solid #f1eadd; border-radius:8px; }
+@media (prefers-reduced-motion:no-preference) { .panel,.gate-button,.button,.state-row { transition:background-color .16s ease,border-color .16s ease,box-shadow .16s ease; } }
+
+/* AUTUMN READABILITY UPDATE
+   Vilagos alapfelulet, erosebb meleg sotet hangsulyok es olvashatobb jobb panel. */
+:root {
+  --bg: #f2ecdf;
+  --panel: #fffaf1;
+  --panel2: #e9dece;
+  --line: #cdbba5;
+  --text: #382b23;
+  --muted: #6f5d4e;
+  --accent: #a95736;
+  --accent2: #687653;
+  --danger: #a4473e;
+}
+
+/* A jobb oldali panel kap egy kicsivel tobb helyet, de a vizualizacio marad nagy. */
+.app-grid {
+  grid-template-columns: minmax(0, 1.08fr) minmax(440px, 0.92fr);
+  gap: 16px;
+  padding: 14px 18px 18px;
+}
+
+/* Kontrasztosabb, melegebb panelkeretek es cimsorok. */
+.panel {
+  background: linear-gradient(145deg, #fffaf2 0%, #f5eddf 100%);
+  border-color: #cdbba5;
+  box-shadow: 0 8px 22px rgba(73, 49, 31, .10);
+}
+.side-column > .panel,
+.control-top-grid > .panel,
+.info-grid > .panel {
+  padding: 15px 16px;
+}
+.side-column .panel-heading {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ddcbb5;
+}
+.side-column .panel-heading h2 {
+  color: #493629;
+  font-size: 18px;
+  font-weight: 800;
+}
+.eyebrow {
+  color: #99502f;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.35px;
+}
+.topbar h1 { color: #3e2d22; }
+.topbar { border-bottom-color: #cdbba5; }
+.topbar-badge, .counter {
+  color: #5d4939;
+  background: #e9ddcc;
+  border-color: #cdbba5;
+  font-size: 12px;
+}
+
+/* Jobb oldali tipografia: a korabbi 9-11px-es szovegek helyett kenyelmes meretek. */
+.side-column,
+.side-column p,
+.side-column label,
+.side-column input,
+.side-column select,
+.side-column button {
+  font-size: 13px;
+}
+.side-column .field-label,
+.side-column .small-note,
+.side-column .hint,
+.side-column .state-meta,
+.side-column .step-indicator,
+.side-column .detail-table {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.side-column .state-name,
+.side-column .detail-title {
+  font-size: 14px;
+  color: #3d2e24;
+}
+.side-column .gate-group-heading strong { font-size: 13px; }
+.side-column .gate-group-heading span { font-size: 11px; }
+.side-column .gate-button {
+  min-height: 36px;
+  padding: 9px 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.side-column .button {
+  min-height: 35px;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+.side-column .text-button { font-size: 12px; }
+.side-column .circuit-chip { font-size: 13px; }
+.side-column .chip-index { font-size: 11px; }
+.side-column .chip-targets { font-size: 11px; }
+.side-column .detail-table strong { font-size: 12px; color: #382b23; }
+.side-column .theory-content {
+  color: #59483a;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.side-column .formula {
+  color: #79452f;
+  background: #e9ddcc;
+  border-color: #cdbba5;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 9px 11px;
+}
+.side-column .explanation {
+  color: #493d30;
+  background: #e2e7d8;
+  border-left-color: #687653;
+  font-size: 12px;
+}
+
+/* A kapcsolodo vezerlok maradjanak egy csoportban, de legyen eleg helyuk. */
+.control-top-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.state-panel .state-row {
+  padding: 9px 10px;
+  gap: 9px;
+  background: #eee3d3;
+  border-color: #d4c1aa;
+}
+.state-panel .state-row.selected {
+  background: #e9d2bd;
+  border-color: #a95736;
+  box-shadow: 0 0 0 1px rgba(169, 87, 54, .18);
+}
+.state-panel .add-state-row input,
+.parameter-panel select,
+.side-column input:not([type="range"]),
+.side-column select {
+  background: #fffdf8;
+  border-color: #cdbba5;
+  color: #382b23;
+  font-size: 13px;
+}
+.parameter-panel .parameter-grid {
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.parameter-panel .parameter-grid label {
+  font-size: 13px;
+  color: #59483a;
+}
+.parameter-panel .parameter-grid label span {
+  color: #382b23;
+  font-weight: 700;
+}
+
+.gate-group {
+  background: #eee3d3;
+  border-color: #cdbba5;
+}
+.gate-target-option {
+  background: #eee3d3;
+  border-color: #d4c1aa;
+  color: #382b23;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+.gate-target-option:has(input:checked) {
+  background: #e9d2bd;
+  border-color: #a95736;
+}
+.gate-group .small-note { font-size: 11px; }
+.angle-input-row input { max-width: 82px; }
+
+.circuit-panel .circuit-list { gap: 8px; }
+.circuit-chip {
+  background: #eee3d3;
+  border-color: #d4c1aa;
+  color: #382b23;
+}
+.circuit-chip.active {
+  background: #e9d2bd;
+  border-color: #a95736;
+  box-shadow: 0 0 0 1px rgba(169, 87, 54, .18);
+}
+.button-primary {
+  background: #a95736;
+  color: #fffaf2;
+}
+.button-secondary {
+  background: #e4d6c3;
+  border-color: #c5ad93;
+  color: #493629;
+}
+.button-secondary:hover { background: #d9c6ad; }
+
+.detail-card {
+  background: #eee3d3;
+  border-color: #d4c1aa;
+}
+.formula { overflow-wrap: anywhere; }
+
+/* A sotetebb szin a feliratokban, keretekben es kisebb feluleteken jelenik meg,
+   a teljes oldal tovabbra is vilagos marad. */
+.bloch-card {
+  background: #f3eadc;
+  border-color: #cdbba5;
+}
+.bloch-card-name { color: #382b23; font-size: 14px; }
+.legend-item { color: #59483a; font-size: 12px; }
+
+@media (max-width: 1200px) {
+  .app-grid { grid-template-columns: minmax(0, 1fr) minmax(400px, .95fr); }
+  .control-top-grid { grid-template-columns: 1fr; }
+  .parameter-panel .parameter-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 900px) {
+  .app-grid { grid-template-columns: 1fr; }
+  .control-top-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .control-top-grid, .gate-groups, .info-grid { grid-template-columns: 1fr; }
 }

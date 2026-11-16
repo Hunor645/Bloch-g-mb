@@ -17,3 +17,20 @@ button:disabled{opacity:.35;cursor:not-allowed;transform:none}
   border-color: var(--accent);
   box-shadow: 0 0 0 1px #6ee7c233;
 }
+
+
+/* Light autumn theme: accessible focus and rotation-field feedback. */
+button:focus-visible { outline: 2px solid #7d8b68; outline-offset: 2px; }
+#angleField.angle-active { color: #b86f4b; }
+#angleField.angle-active + #gateAngle,
+#angleField.angle-active + .angle-input-row input {
+  border-color: #b86f4b;
+  box-shadow: 0 0 0 2px rgba(184,111,75,.14);
+}
+
+
+/* Light autumn theme: accessible focus and rotation-field feedback. */
+button:focus-visible { outline:2px solid #7d8b68; outline-offset:2px; }
+#angleField.angle-active { color:#b86f4b; }
+#angleField.angle-active + #gateAngle,
+#angleField.angle-active + .angle-input-row input { border-color:#b86f4b; box-shadow:0 0 0 2px rgba(184,111,75,.14); }

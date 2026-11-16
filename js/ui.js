@@ -13,13 +13,13 @@
 
   const fmt = n => Math.abs(n) < 1e-10 ? "0.000" : n.toFixed(3);
 
-  function renderAll() {
+  function renderAll(options = {}) {
     renderStates();
     renderGateTargets();
     renderCircuit();
     renderDetails();
     renderPlayback();
-    global.BlochSphere.render(simulator.states, selectedId);
+    global.BlochSphere.render(simulator.states, selectedId, options);
   }
 
   // Állapotok listája
@@ -350,14 +350,14 @@
     $("prevBtn").addEventListener("click", () => {
       stopPlayback();
       simulator.previous();
-      renderAll();
+      renderAll({ animate: true });
     });
 
     // Egy lépés előre
     $("nextBtn").addEventListener("click", () => {
       stopPlayback();
       simulator.next();
-      renderAll();
+      renderAll({ animate: true });
     });
 
     // Automatikus lejátszás / szünet
@@ -370,6 +370,7 @@
 
       if (simulator.step >= simulator.circuit.length) {
         simulator.reset();
+        renderAll();
       }
 
       playTimer = setInterval(() => {
@@ -383,7 +384,7 @@
         if (simulator.step >= simulator.circuit.length) {
           stopPlayback();
         }
-        renderAll();
+        renderAll({ animate: true });
       }, 850);
 
       renderPlayback();
