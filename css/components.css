@@ -18,44 +18,19 @@ button:disabled{opacity:.35;cursor:not-allowed;transform:none}
   box-shadow: 0 0 0 1px #6ee7c233;
 }
 
-/* Választósáv: melyik állapot Bloch-gömbje legyen látható. */
-.sphere-selector {
-  display: flex;
-  flex: 0 0 auto;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 10px;
+
+/* Light autumn theme: accessible focus and rotation-field feedback. */
+button:focus-visible { outline: 2px solid #7d8b68; outline-offset: 2px; }
+#angleField.angle-active { color: #b86f4b; }
+#angleField.angle-active + #gateAngle,
+#angleField.angle-active + .angle-input-row input {
+  border-color: #b86f4b;
+  box-shadow: 0 0 0 2px rgba(184,111,75,.14);
 }
 
-.sphere-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  max-width: 100%;
-  padding: 7px 12px;
-  border: 1px solid var(--line);
-  border-radius: 30px;
-  background: #0e1724;
-  color: var(--muted);
-  font: inherit;
-  font-size: 11px;
-  cursor: pointer;
-}
 
-.sphere-tab:hover {
-  color: var(--text);
-  border-color: var(--accent2);
-}
-
-.sphere-tab.active {
-  color: var(--text);
-  border-color: var(--accent);
-  background: #142a2a;
-  font-weight: 700;
-}
-
-.sphere-tab span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+/* Light autumn theme: accessible focus and rotation-field feedback. */
+button:focus-visible { outline:2px solid #7d8b68; outline-offset:2px; }
+#angleField.angle-active { color:#b86f4b; }
+#angleField.angle-active + #gateAngle,
+#angleField.angle-active + .angle-input-row input { border-color:#b86f4b; box-shadow:0 0 0 2px rgba(184,111,75,.14); }

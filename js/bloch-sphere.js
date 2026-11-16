@@ -1,17 +1,7 @@
 
-/* Plotly-alapú, állapotonként különálló 3D Bloch-gömbök.
- *
- * Fontos tervezési elv: a gömböt, a tengelyeket és a segédköröket
- * állapotonként EGYSZER építjük fel (Plotly.newPlot), és utána már
- * kizárólag az állapotvektor nyomvonalát frissítjük (Plotly.restyle).
- * A layoutot - és benne a kameraállást - sosem küldjük újra, így a
- * gömb és a nézet mozdulatlan marad; csak a jelzővektor mozog.
- */
+/* Plotly-alapú, állapotonként különálló 3D Bloch-gömbök. */
 (function (global) {
   "use strict";
-
-  // Állapotazonosító -> { card, plotDiv, vectorIndex, observer }
-  const plots = new Map();
 
   function sphereSurface() {
     const u = [], v = [];
@@ -46,8 +36,8 @@
       opacity: 0.13,
       showscale: false,
       colorscale: [
-        [0, "#4e80b7"],
-        [1, "#8de5d0"]
+        [0, "#d8bd98"],
+        [1, "#c5d2b9"]
       ],
       hoverinfo: "skip",
       name: "Bloch-gömb"
@@ -67,41 +57,6 @@
     };
   }
 
-  function circle(plane) {
-    const points = [];
-
-    for (let k = 0; k <= 100; k++) {
-      const a = 2 * Math.PI * k / 100;
-
-      if (plane === "xy") {
-        points.push([Math.cos(a), Math.sin(a), 0]);
-      } else if (plane === "xz") {
-        points.push([Math.cos(a), 0, Math.sin(a)]);
-      } else {
-        points.push([0, Math.cos(a), Math.sin(a)]);
-      }
-    }
-
-    return points;
-  }
-
-  /* A gömb statikus díszlete: felszín, segédkörök, tengelyek.
-     Ezek sosem változnak, ezért csak létrehozáskor kerülnek be. */
-  function staticTraces() {
-    return [
-      sphereSurface(),
-
-      line(circle("xy"), "#65758b", 1, "dot"),
-      line(circle("xz"), "#53657c", 1, "dot"),
-      line(circle("yz"), "#53657c", 1, "dot"),
-
-      line([[-1.18, 0, 0], [1.18, 0, 0]], "#d28d8d", 2),
-      line([[0, -1.18, 0], [0, 1.18, 0]], "#91b8e9", 2),
-      line([[0, 0, -1.18], [0, 0, 1.18]], "#9ad9bc", 2)
-    ];
-  }
-
-  /* Az egyetlen dinamikus nyomvonal: az állapotvektor. */
   function vectorTrace(state) {
     const p = global.Quantum.bloch(state.current);
 
@@ -111,14 +66,8 @@
       x: [0, p.x],
       y: [0, p.y],
       z: [0, p.z],
-      line: {
-        color: state.color,
-        width: 7
-      },
-      marker: {
-        size: [2, 5],
-        color: state.color
-      },
+      line: { color: state.color, width: 7 },
+      marker: { size: [2, 5], color: state.color },
       name: state.name,
       hovertemplate:
         `${state.name}<br>` +
@@ -128,59 +77,41 @@
     };
   }
 
-  function buildLayout(id) {
-    return {
-      autosize: true,
-      margin: { l: 0, r: 0, t: 0, b: 0 },
-      paper_bgcolor: "rgba(0,0,0,0)",
-      plot_bgcolor: "rgba(0,0,0,0)",
-      showlegend: false,
-      uirevision: "bloch-" + id,
-      scene: {
-        uirevision: "bloch-camera-" + id,
-        bgcolor: "rgba(0,0,0,0)",
-        aspectmode: "cube",
-        camera: {
-          eye: { x: 1.55, y: 1.55, z: 1.2 }
-        },
-        xaxis: { range: [-1.3, 1.3], visible: false },
-        yaxis: { range: [-1.3, 1.3], visible: false },
-        zaxis: { range: [-1.3, 1.3], visible: false },
-        annotations: [
-          {
-            x: 1.22, y: 0, z: 0,
-            text: "X",
-            showarrow: false,
-            font: { color: "#d28d8d" }
-          },
-          {
-            x: 0, y: 1.22, z: 0,
-            text: "Y",
-            showarrow: false,
-            font: { color: "#91b8e9" }
-          },
-          {
-            x: 0, y: 0, z: 1.22,
-            text: "|0⟩",
-            showarrow: false,
-            font: { color: "#9ad9bc" }
-          },
-          {
-            x: 0, y: 0, z: -1.22,
-            text: "|1⟩",
-            showarrow: false,
-            font: { color: "#9ad9bc" }
-          }
-        ]
-      },
-      font: { color: "#dce6f2" }
-    };
-  }
+  function buildTraces(state) {
+    const traces = [sphereSurface()];
 
-  const plotConfig = {
-    displayModeBar: false,
-    responsive: true
-  };
+    const circle = plane => {
+      const points = [];
+
+      for (let k = 0; k <= 100; k++) {
+        const a = 2 * Math.PI * k / 100;
+
+        if (plane === "xy") {
+          points.push([Math.cos(a), Math.sin(a), 0]);
+        } else if (plane === "xz") {
+          points.push([Math.cos(a), 0, Math.sin(a)]);
+        } else {
+          points.push([0, Math.cos(a), Math.sin(a)]);
+        }
+      }
+
+      return points;
+    };
+
+    traces.push(
+      line(circle("xy"), "#c7b9a7", 1, "dot"),
+      line(circle("xz"), "#c7b9a7", 1, "dot"),
+      line(circle("yz"), "#c7b9a7", 1, "dot"),
+
+      line([[-1.18, 0, 0], [1.18, 0, 0]], "#bd795b", 2),
+      line([[0, -1.18, 0], [0, 1.18, 0]], "#8299a3", 2),
+      line([[0, 0, -1.18], [0, 0, 1.18]], "#829174", 2)
+    );
+
+    traces.push(vectorTrace(state));
+
+    return traces;
+  }
 
   function createCard(state) {
     const card = document.createElement("article");
@@ -207,115 +138,141 @@
 
     card.append(heading, plot);
 
-    return { card, plot };
+    return card;
   }
 
-  /* A tárolót csak akkor méretezzük újra, ha tényleg változott a mérete
-     (például állapot hozzáadásakor módosul a rács). Így a léptetés és a
-     kapuhozzáadás nem kényszerít ki újratördelést. */
-  function observeSize(plot) {
-    if (typeof ResizeObserver !== "function") return null;
-
-    let pending = false;
-
-    const observer = new ResizeObserver(() => {
-      if (pending) return;
-      pending = true;
-
-      requestAnimationFrame(() => {
-        pending = false;
-
-        if (plot.isConnected && global.Plotly && plot.offsetWidth > 0) {
-          global.Plotly.Plots.resize(plot);
-        }
-      });
-    });
-
-    observer.observe(plot);
-
-    return observer;
-  }
-
-  function updateHeading(card, state) {
+  function updateCard(card, state) {
     const name = card.querySelector(".bloch-card-name");
     const dot = card.querySelector(".legend-dot");
 
-    if (name.textContent !== state.name) {
-      name.textContent = state.name;
-    }
-
+    name.textContent = state.name;
     dot.style.background = state.color;
   }
 
-  /* Kizárólag az állapotvektor frissítése. A layout érintetlen marad,
-     ezért a kamera, a nagyítás és a gömb helyzete nem változik. */
-  function updateVector(entry, state) {
-    const p = global.Quantum.bloch(state.current);
+  // Az éppen futó animációk az egyes Plotly-ábrákhoz kötődnek.
+  // Újabb léptetéskor a korábbi animáció érvénytelenné válik.
+  const animationTokens = new WeakMap();
 
-    global.Plotly.restyle(
-      entry.plot,
-      {
-        x: [[0, p.x]],
-        y: [[0, p.y]],
-        z: [[0, p.z]],
-        "line.color": [state.color],
-        "marker.color": [state.color]
-      },
-      [entry.vectorIndex]
-    );
+  // A Plotly kameraállását külön is eltároljuk, mert a react() hívás
+  // során a layout újra megadásakor egyes Plotly-verziók visszaállíthatják
+  // a scene.camera értékét. A cache állapotonként külön él.
+  const cameraCache = new WeakMap();
+  const cameraListeners = new WeakSet();
+
+  function cloneCamera(camera) {
+    if (!camera) return null;
+    return {
+      eye: camera.eye ? { ...camera.eye } : undefined,
+      center: camera.center ? { ...camera.center } : undefined,
+      up: camera.up ? { ...camera.up } : undefined,
+      projection: camera.projection ? { ...camera.projection } : undefined
+    };
   }
 
-  function discard(id, entry) {
-    if (entry.observer) {
-      entry.observer.disconnect();
+  function mergeCamera(base, update) {
+    const result = cloneCamera(base) || {};
+    for (const key of ["eye", "center", "up", "projection"]) {
+      if (update && update[key]) {
+        result[key] = { ...(result[key] || {}), ...update[key] };
+      }
     }
-
-    if (global.Plotly && entry.plot) {
-      global.Plotly.purge(entry.plot);
-    }
-
-    entry.card.remove();
-    plots.delete(id);
+    return result;
   }
 
-  /* Egy állapot ábrájának felépítése. Csak akkor fut le, amikor az
-     állapot először kerül megjelenítésre (lusta létrehozás). */
-  function createPlot(container, state) {
-    const { card, plot } = createCard(state);
-    container.appendChild(card);
+  function rememberCamera(plot, eventData) {
+    let camera = cameraCache.get(plot) ||
+      cloneCamera(plot.layout && plot.layout.scene && plot.layout.scene.camera);
 
-    const traces = staticTraces();
-    const vectorIndex = traces.length;
+    if (eventData && eventData["scene.camera"]) {
+      camera = mergeCamera(camera, eventData["scene.camera"]);
+    } else if (eventData) {
+      // A Plotly relayout esemény gyakran pontonkénti kulcsokat ad vissza.
+      const partial = {};
+      for (const key of ["eye", "center", "up"]) {
+        const value = {};
+        for (const axis of ["x", "y", "z"]) {
+          const eventKey = `scene.camera.${key}.${axis}`;
+          if (Object.prototype.hasOwnProperty.call(eventData, eventKey)) {
+            value[axis] = eventData[eventKey];
+          }
+        }
+        if (Object.keys(value).length) partial[key] = value;
+      }
+      camera = mergeCamera(camera, partial);
+    }
 
-    traces.push(vectorTrace(state));
+    if (camera) cameraCache.set(plot, camera);
+  }
 
-    global.Plotly.newPlot(
-      plot,
-      traces,
-      buildLayout(String(state.id)),
-      plotConfig
-    );
+  function attachCameraListener(plot) {
+    if (cameraListeners.has(plot) || typeof plot.on !== "function") return;
+    plot.on("plotly_relayout", eventData => rememberCamera(plot, eventData));
+    cameraListeners.add(plot);
+  }
 
-    const entry = {
-      card,
-      plot,
-      vectorIndex,
-      observer: observeSize(plot)
+  function animateVector(plot, card, vectorIndex, targetTrace, duration = 620) {
+    const token = (animationTokens.get(plot) || 0) + 1;
+    animationTokens.set(plot, token);
+
+    const currentTrace = plot.data && plot.data[vectorIndex];
+    if (!currentTrace || !currentTrace.x || !currentTrace.y || !currentTrace.z) {
+      return Promise.reject(new Error("A Bloch-vektor még nincs inicializálva."));
+    }
+
+    const from = {
+      x: Number(currentTrace.x[1]) || 0,
+      y: Number(currentTrace.y[1]) || 0,
+      z: Number(currentTrace.z[1]) || 0
+    };
+    const to = {
+      x: Number(targetTrace.x[1]) || 0,
+      y: Number(targetTrace.y[1]) || 0,
+      z: Number(targetTrace.z[1]) || 0
     };
 
-    plots.set(String(state.id), entry);
+    card.classList.remove("is-animating");
+    void card.offsetWidth;
+    card.classList.add("is-animating");
 
-    return entry;
+    return new Promise((resolve, reject) => {
+      const startedAt = Date.now();
+
+      function frame() {
+        if (animationTokens.get(plot) !== token || !plot.isConnected) {
+          resolve();
+          return;
+        }
+
+        const progress = Math.min(1, (Date.now() - startedAt) / duration);
+        // Smoothstep: lágy indulás és megállás.
+        const eased = progress * progress * (3 - 2 * progress);
+        const x = from.x + (to.x - from.x) * eased;
+        const y = from.y + (to.y - from.y) * eased;
+        const z = from.z + (to.z - from.z) * eased;
+
+        // A scatter3d trace pontjait közvetlenül frissítjük.
+        // Ez megbízhatóbb, mint a Plotly.animate 3D trace-eknél.
+        global.Plotly.restyle(plot, {
+          x: [[0, x]],
+          y: [[0, y]],
+          z: [[0, z]]
+        }, [vectorIndex]).then(() => {
+          if (progress >= 1) {
+            card.classList.remove("is-animating");
+            resolve();
+          } else {
+            requestAnimationFrame(frame);
+          }
+        }).catch(reject);
+      }
+
+      requestAnimationFrame(frame);
+    });
   }
 
-  /* Egyszerre mindig csak egy gömb látszik: a kijelölt állapoté.
-     A többi ábrát nem bontjuk le, csak elrejtjük, így visszaváltáskor
-     a korábban beállított kameraállás és nagyítás megmarad. */
-  function render(states, selectedId) {
+  function render(states, selectedId, options = {}) {
     const container = document.getElementById("blochPlots");
     const fallback = document.getElementById("plotFallback");
-
-    container.dataset.count = 1;
 
     if (!global.Plotly) {
       container.classList.add("hidden");
@@ -325,41 +282,116 @@
 
     container.classList.remove("hidden");
     fallback.classList.add("hidden");
+    container.dataset.count = String(states.length);
 
-    // A már törölt állapotok ábráinak felszabadítása.
-    const validIds = new Set(states.map(s => String(s.id)));
+    if (!states.length) return;
 
-    for (const [id, entry] of [...plots]) {
-      if (!validIds.has(id)) {
-        discard(id, entry);
+    const existingCards = new Map(
+      Array.from(container.querySelectorAll(".bloch-card"))
+        .map(card => [String(card.dataset.stateId), card])
+    );
+    const activeIds = new Set(states.map(state => String(state.id)));
+
+    // A kártyákat megtartjuk rejtve is, így állapotváltáskor
+    // az adott állapot saját Plotly-kamerája is megmarad.
+    for (const state of states) {
+      const id = String(state.id);
+      let card = existingCards.get(id);
+
+      if (!card) {
+        card = createCard(state);
+        container.appendChild(card);
+      }
+
+      updateCard(card, state);
+      card.classList.remove("hidden");
+    }
+
+    for (const [id, card] of existingCards) {
+      if (!activeIds.has(id)) {
+        const plot = card.querySelector(".bloch-plot-canvas");
+        if (plot) global.Plotly.purge(plot);
+        card.remove();
       }
     }
 
-    // A megjelenítendő állapot a kijelölt; ha az időközben megszűnt,
-    // az első állapotra esünk vissza.
-    const active = states.find(s => s.id === selectedId) || states[0];
+    for (const state of states) {
+      const card = container.querySelector(
+        `.bloch-card[data-state-id="${String(state.id)}"]`
+      );
+      const plot = card.querySelector(".bloch-plot-canvas");
 
-    if (!active) return;
+      // A már felhasználó által beállított kamera az elsődleges.
+      // Ha még nincs mentett nézet, a kezdő kamera kerül használatba.
+      const currentCamera = plot.layout && plot.layout.scene && plot.layout.scene.camera;
+      if (currentCamera && !cameraCache.has(plot)) {
+        cameraCache.set(plot, cloneCamera(currentCamera));
+      }
+      const camera = cameraCache.get(plot) || {
+        eye: { x: 1.55, y: 1.55, z: 1.2 }
+      };
+      attachCameraListener(plot);
 
-    const activeKey = String(active.id);
+      const layout = {
+        autosize: true,
+        margin: { l: 0, r: 0, t: 0, b: 0 },
+        paper_bgcolor: "rgba(0,0,0,0)",
+        plot_bgcolor: "rgba(0,0,0,0)",
+        showlegend: false,
+        uirevision: "bloch-" + state.id,
+        scene: {
+          uirevision: "bloch-camera-" + state.id,
+          bgcolor: "rgba(0,0,0,0)",
+          aspectmode: "cube",
+          camera: cloneCamera(camera),
+          xaxis: { range: [-1.3, 1.3], visible: false },
+          yaxis: { range: [-1.3, 1.3], visible: false },
+          zaxis: { range: [-1.3, 1.3], visible: false },
+          annotations: [
+            { x: 1.22, y: 0, z: 0, text: "X", showarrow: false, font: { color: "#bd795b" } },
+            { x: 0, y: 1.22, z: 0, text: "Y", showarrow: false, font: { color: "#8299a3" } },
+            { x: 0, y: 0, z: 1.22, text: "|0⟩", showarrow: false, font: { color: "#829174" } },
+            { x: 0, y: 0, z: -1.22, text: "|1⟩", showarrow: false, font: { color: "#829174" } }
+          ]
+        },
+        font: { color: "#51483f" }
+      };
 
-    // Előbb elrejtjük a többit, hogy egy újonnan létrehozott ábra
-    // már a teljes cellaméretre épüljön fel.
-    for (const [id, entry] of plots) {
-      entry.card.classList.toggle("hidden", id !== activeKey);
+      const traces = buildTraces(state);
+      const vectorIndex = traces.length - 1;
+      const canAnimate = options.animate &&
+        Array.isArray(plot.data) &&
+        plot.data.length === traces.length &&
+        typeof global.Plotly.restyle === "function" &&
+        typeof global.requestAnimationFrame === "function";
+
+      let update;
+      if (canAnimate) {
+        update = animateVector(plot, card, vectorIndex, traces[vectorIndex])
+          .catch(() => global.Plotly.react(
+            plot, traces, layout,
+            { displayModeBar: false, responsive: true }
+          ));
+      } else {
+        // Első megjelenítéskor, illetve normál frissítéskor a teljes ábrát
+        // újrarajzoljuk; csak léptetéskor animáljuk külön a vektort.
+        animationTokens.set(plot, (animationTokens.get(plot) || 0) + 1);
+        update = global.Plotly.react(
+          plot,
+          traces,
+          layout,
+          { displayModeBar: false, responsive: true }
+        );
+      }
+
+      Promise.resolve(update).then(() => {
+        requestAnimationFrame(() => {
+          if (plot.isConnected && global.Plotly) {
+            global.Plotly.Plots.resize(plot);
+          }
+        });
+      }).catch(error => console.error("Bloch-gömb frissítési hiba:", error));
     }
-
-    const entry = plots.get(activeKey);
-
-    if (!entry) {
-      createPlot(container, active);
-      return;
-    }
-
-    // Meglévő ábra: a DOM-csomópontot NEM mozgatjuk, csak a vektort
-    // frissítjük, így a gömb és a kameraállás mozdulatlan marad.
-    updateHeading(entry.card, active);
-    updateVector(entry, active);
   }
 
   global.BlochSphere = { render };

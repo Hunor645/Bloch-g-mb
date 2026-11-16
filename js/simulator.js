@@ -6,10 +6,10 @@
   const Q = global.Quantum;
 
   const colors = [
-    "#6ee7c2",
-    "#7aa7ff",
-    "#ffb86b",
-    "#e99cff"
+    "#c47755",
+    "#7896a5",
+    "#c39a4a",
+    "#a7839b"
   ];
 
   const presets = {

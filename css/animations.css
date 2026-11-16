@@ -1,1 +1,29 @@
-/* A későbbi, részletesebb átmenetek helye. A Plotly animációt a bloch-sphere.js kezeli. */
+/* A Bloch-vektor finom mozgasat a Plotly 3D animacioja kezeli.
+   Ez a fajl a hozza tartozo visszafogott vizualis visszajelzest adja. */
+
+.bloch-card {
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.bloch-card.is-animating {
+  animation: bloch-card-pulse 680ms ease-out;
+}
+
+@keyframes bloch-card-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(167, 95, 64, 0.30);
+    border-color: var(--accent, #a75f40);
+  }
+  100% {
+    box-shadow: 0 0 0 9px rgba(167, 95, 64, 0);
+    border-color: var(--line, #d8c7b3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bloch-card,
+  .bloch-card.is-animating {
+    animation: none !important;
+    transition: none !important;
+  }
+}
