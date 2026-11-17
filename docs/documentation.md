@@ -190,7 +190,7 @@ Bloch-g-mb/
 ├── js/                # quantum, gates, simulator, bloch-sphere, ui, main
 ├── lib/plotly.min.js  # Plotly.js v4.1.1 (MIT)
 ├── tests/             # test.html, test-quantum.js
-└── docs/              # documentation.md, bemutato.md, test-checklist.md
+└── docs/              # documentation.md, test-checklist.md
 ```
 
 ### 7.2. Modulok és rétegek
@@ -280,4 +280,4 @@ A projekt kétfős csapatmunkában készült, Git-alapú verziókezeléssel, kü
 
 ## 12. AI használat
 
-A Bloch-gömb 3D megjelenítéséhez, dokumentációhoz és a css fájlok megírásához részben használatba vettük a gerenatív AI-t 
+A Bloch-gömb 3D megjelenítéséhez, dokumentációhoz és a css fájlok megírásához részben használatba vettük a generatív AI-t 
