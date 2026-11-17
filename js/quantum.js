@@ -1,4 +1,3 @@
-/* Komplex számok és egyqubites állapotok. DOM-függőséget nem tartalmaz. */
 (function (global) {
   "use strict";
   const C = {

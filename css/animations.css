@@ -1,5 +1,3 @@
-/* A Bloch-vektor finom mozgasat a Plotly 3D animacioja kezeli.
-   Ez a fajl a hozza tartozo visszafogott vizualis visszajelzest adja. */
 
 .bloch-card {
   transition: border-color 180ms ease, box-shadow 180ms ease;

@@ -1,4 +1,3 @@
-/* Egyqubites kapuk. A mátrix elemei Quantum.C komplex számok. */
 (function (global) {
   "use strict";
   const C=global.Quantum.C, z=C.make(0,0), o=C.make(1,0), m=C.make(-1,0), i=C.make(0,1);

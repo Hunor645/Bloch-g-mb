@@ -57,8 +57,6 @@ A projekt natív HTML, CSS és JavaScript állományokból áll: nincs fordítá
 2. Ellenőrizd, hogy a `lib/plotly.min.js` a helyén van (a tárolóban megtalálható).
 3. Nyisd meg az `index.html` fájlt böngészőben – dupla kattintás is elég.
 
-A program a `file://` protokollon működik, mert minden szkript lokális, és nincs hálózati kérés. Webszerver tehát nem kell; ha mégis hálózaton osztanád meg, bármely statikus kiszolgáló megteszi (például `python -m http.server 8000`).
-
 **Tesztek futtatása:** nyisd meg a `tests/test.html` fájlt ugyanígy. A tesztek automatikusan lefutnak, az eredmény azonnal megjelenik.
 
 ---
@@ -68,8 +66,7 @@ A program a `file://` protokollon működik, mert minden szkript lokális, és n
 | Komponens | Verzió | Licenc | Szerep | Tárolás |
 | --------- | ------ | ------ | ------ | ------- |
 | **Plotly.js** | 4.1.1 | MIT | A 3D Bloch-gömb interaktív megjelenítése | Helyben: `lib/plotly.min.js` (4,6 MB) |
-| **Manrope** | – | SIL OFL | A felület alapbetűtípusa | Google Fonts, `@import` a `style.css`-ben |
-| **DM Mono** | – | SIL OFL | Számértékek monospace megjelenítése | Google Fonts, `@import` a `style.css`-ben |
+
 
 A projekt **ezeken kívül semmilyen külső könyvtárat nem használ**: nincs JavaScript-keretrendszer (React, Vue, jQuery) és nincs kvantuminformatikai könyvtár (Qiskit vagy hasonló) sem.
 

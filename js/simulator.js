@@ -1,5 +1,4 @@
 
-/* A kapusorozat és a több állapot kezelése. */
 (function (global) {
   "use strict";
 
@@ -120,9 +119,6 @@
     recompute() {
       this.step = Math.min(this.step, this.circuit.length);
 
-      // Minden állapotot a saját kezdőállapotából indítunk.
-      // Ezután kapunként haladunk: egy kapulépésben az összes
-      // hozzárendelt állapot frissül, a többi változatlan marad.
       const currentStates = new Map(
         this.states.map(st => [st.id, Q.clone(st.initial)])
       );

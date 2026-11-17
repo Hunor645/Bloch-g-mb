@@ -1,5 +1,4 @@
 
-/* DOM-megjelenítés és eseménykezelés. */
 (function (global) {
   "use strict";
 
@@ -23,7 +22,7 @@
     global.BlochSphere.render(simulator.states, selectedId, options);
   }
 
-  // Annak kiválasztása, melyik állapot Bloch-gömbje legyen látható.
+
   function renderSphereSelector() {
     $("sphereSelector").innerHTML = simulator.states.map(s => {
       const active = s.id === selectedId;
@@ -41,7 +40,7 @@
     }).join("");
   }
 
-  // Állapotok listája
+
   function renderStates() {
     $("stateCount").textContent = `${simulator.states.length} / 4`;
 
@@ -71,7 +70,6 @@
     `).join("");
   }
 
-  // Az éppen hozzáadandó kapu célállapotainak kiválasztása
   function renderGateTargets() {
     const container = $("gateTargets");
 
@@ -94,7 +92,6 @@
     `).join("");
   }
 
-  // Kapusorozat
   function renderCircuit() {
     $("stepMax").textContent = simulator.circuit.length;
 
@@ -122,7 +119,6 @@
       : '<span class="empty-state">Még nincs hozzáadott kapu. Válassz egyet a fenti panelen.</span>';
   }
 
-  // Kvantumállapotok részletes adatai
   function renderDetails() {
     $("stateDetails").innerHTML = simulator.states.map(s => {
       const b = Q.bloch(s.current);
@@ -155,7 +151,6 @@
     }).join("");
   }
 
-  // Lejátszásvezérlők
   function renderPlayback() {
     $("stepValue").textContent = simulator.step;
 
@@ -183,7 +178,6 @@
     }
   }
 
-  // Kiválasztott állapot szerkesztése
   function setSelected(id) {
     selectedId = id;
 
@@ -203,10 +197,7 @@
     $("presetSelect").value = match ? match[0] : "custom";
   }
 
-  // Eseménykezelők
   function bind() {
-
-    // Új állapot hozzáadása
     $("addStateBtn").addEventListener("click", () => {
       try {
         stopPlayback();
@@ -228,7 +219,6 @@
       }
     });
 
-    // Állapot kiválasztása vagy törlése
     $("stateList").addEventListener("click", e => {
       const edit = e.target.closest("[data-edit]");
       const remove = e.target.closest("[data-remove]");
@@ -256,7 +246,6 @@
       }
     });
 
-    // A megjelenített gömb kiválasztása
     $("sphereSelector").addEventListener("click", e => {
       const tab = e.target.closest("[data-sphere]");
       if (!tab) return;
@@ -265,7 +254,6 @@
       renderAll();
     });
 
-    // Célállapotok kiválasztása
     $("gateTargets").addEventListener("change", e => {
       const checkbox = e.target.closest("[data-target-id]");
       if (!checkbox) return;
@@ -279,7 +267,6 @@
       }
     });
 
-    // Kezdőállapot szögparamétereinek módosítása
     $("thetaInput").addEventListener("input", updateAngles);
     $("phiInput").addEventListener("input", updateAngles);
 
@@ -293,8 +280,6 @@
       }
     });
 
-    // A forgatókapu gombokra mutatva kiemeljük a szög mezőt,
-    // hogy egyértelmű legyen: a szög csak ezekre vonatkozik.
     const rotationGates = ["Rx", "Ry", "Rz"];
 
     document.querySelectorAll("[data-gate]").forEach(btn => {
@@ -311,7 +296,6 @@
       }
     });
 
-    // Kapuk hozzáadása
     document.querySelectorAll("[data-gate]").forEach(btn => {
       btn.addEventListener("click", () => {
         const name = btn.dataset.gate;
@@ -349,14 +333,12 @@
       });
     });
 
-    // Teljes kapusorozat törlése
     $("clearCircuitBtn").addEventListener("click", () => {
       stopPlayback();
       simulator.clear();
       renderAll();
     });
 
-    // Egy kapu törlése
     $("circuitList").addEventListener("click", e => {
       const b = e.target.closest("[data-gate-remove]");
 
@@ -367,28 +349,24 @@
       }
     });
 
-    // Visszaállítás
     $("resetBtn").addEventListener("click", () => {
       stopPlayback();
       simulator.reset();
       renderAll();
     });
 
-    // Egy lépés vissza
     $("prevBtn").addEventListener("click", () => {
       stopPlayback();
       simulator.previous();
       renderAll({ animate: true });
     });
 
-    // Egy lépés előre
     $("nextBtn").addEventListener("click", () => {
       stopPlayback();
       simulator.next();
       renderAll({ animate: true });
     });
 
-    // Automatikus lejátszás / szünet
     $("playBtn").addEventListener("click", () => {
       if (playTimer) {
         stopPlayback();
@@ -419,7 +397,6 @@
     });
   }
 
-  // Szögértékek módosítása
   function updateAngles() {
     const t = Number($("thetaInput").value);
     const p = Number($("phiInput").value);

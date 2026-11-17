@@ -1,5 +1,4 @@
 
-/* Plotly-alapú, állapotonként különálló 3D Bloch-gömbök. */
 (function (global) {
   "use strict";
 
@@ -149,13 +148,9 @@
     dot.style.background = state.color;
   }
 
-  // Az éppen futó animációk az egyes Plotly-ábrákhoz kötődnek.
-  // Újabb léptetéskor a korábbi animáció érvénytelenné válik.
   const animationTokens = new WeakMap();
 
-  // A Plotly kameraállását külön is eltároljuk, mert a react() hívás
-  // során a layout újra megadásakor egyes Plotly-verziók visszaállíthatják
-  // a scene.camera értékét. A cache állapotonként külön él.
+
   const cameraCache = new WeakMap();
   const cameraListeners = new WeakSet();
 
@@ -186,7 +181,7 @@
     if (eventData && eventData["scene.camera"]) {
       camera = mergeCamera(camera, eventData["scene.camera"]);
     } else if (eventData) {
-      // A Plotly relayout esemény gyakran pontonkénti kulcsokat ad vissza.
+  
       const partial = {};
       for (const key of ["eye", "center", "up"]) {
         const value = {};
@@ -244,14 +239,11 @@
         }
 
         const progress = Math.min(1, (Date.now() - startedAt) / duration);
-        // Smoothstep: lágy indulás és megállás.
         const eased = progress * progress * (3 - 2 * progress);
         const x = from.x + (to.x - from.x) * eased;
         const y = from.y + (to.y - from.y) * eased;
         const z = from.z + (to.z - from.z) * eased;
 
-        // A scatter3d trace pontjait közvetlenül frissítjük.
-        // Ez megbízhatóbb, mint a Plotly.animate 3D trace-eknél.
         global.Plotly.restyle(plot, {
           x: [[0, x]],
           y: [[0, y]],
@@ -292,8 +284,6 @@
     );
     const activeIds = new Set(states.map(state => String(state.id)));
 
-    // A kártyákat megtartjuk rejtve is, így állapotváltáskor
-    // az adott állapot saját Plotly-kamerája is megmarad.
     for (const state of states) {
       const id = String(state.id);
       let card = existingCards.get(id);
@@ -321,8 +311,6 @@
       );
       const plot = card.querySelector(".bloch-plot-canvas");
 
-      // A már felhasználó által beállított kamera az elsődleges.
-      // Ha még nincs mentett nézet, a kezdő kamera kerül használatba.
       const currentCamera = plot.layout && plot.layout.scene && plot.layout.scene.camera;
       if (currentCamera && !cameraCache.has(plot)) {
         cameraCache.set(plot, cloneCamera(currentCamera));
@@ -373,8 +361,6 @@
             { displayModeBar: false, responsive: true }
           ));
       } else {
-        // Első megjelenítéskor, illetve normál frissítéskor a teljes ábrát
-        // újrarajzoljuk; csak léptetéskor animáljuk külön a vektort.
         animationTokens.set(plot, (animationTokens.get(plot) || 0) + 1);
         update = global.Plotly.react(
           plot,
